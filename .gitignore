@@ -1,0 +1,47 @@
+# Gradle
+.gradle/
+build/
+
+# Local configuration
+local.properties
+gradle.properties.local
+
+# IDE
+.idea/
+*.iml
+
+# Kotlin
+.kotlin/
+
+# Gradle wrapper (keep wrapper properties, ignore jar)
+gradle/wrapper/gradle-wrapper.jar
+
+# Build outputs
+*.apk
+*.aab
+*.ap_
+*.class
+
+# Signing
+keystore.properties
+*.jks
+*.keystore
+
+# Google Services / Firebase
+google-services.json
+
+# OS / Editor
+.DS_Store
+*.log
+*.tmp
+*.bak
+*.orig
+
+# Android Studio
+/captures/
+.externalNativeBuild/
+.cxx/
+
+# Crashlytics / Firebase (keep gradle.properties)
+*.properties
+!gradle.properties

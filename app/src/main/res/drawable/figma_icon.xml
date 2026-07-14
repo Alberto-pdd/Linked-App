@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="432"
+    android:viewportHeight="432">
+    <!-- Purple curve (top-left) -->
+    <path
+        android:fillColor="#A259FF"
+        android:pathData="M91.5,75.5c0,39.4 31.9,71.3 71.3,71.3h71.3V4.2h-71.3c-39.4,0 -71.3,31.9 -71.3,71.3z"/>
+    <!-- Orange curve (top-right) -->
+    <path
+        android:fillColor="#F24E1E"
+        android:pathData="M234,4.2v142.5h71.3c39.4,0 71.3,-31.9 71.3,-71.3S374.6,4.2 335.3,4.2z"/>
+    <!-- Blue curve (center-left) -->
+    <path
+        android:fillColor="#1ABCFE"
+        android:pathData="M91.5,218c0,39.4 31.9,71.3 71.3,71.3h71.3V146.7h-71.3c-39.4,0 -71.3,31.9 -71.3,71.3z"/>
+    <!-- Green circle (center-right) -->
+    <path
+        android:fillColor="#0ACF83"
+        android:pathData="M234,218c0,-39.4 31.9,-71.3 71.3,-71.3c39.4,0 71.3,31.9 71.3,71.3c0,39.4 -31.9,71.3 -71.3,71.3C265.9,289.3 234,257.4 234,218z"/>
+    <!-- Red curve (bottom-left) -->
+    <path
+        android:fillColor="#FF7262"
+        android:pathData="M91.5,360.5c0,-39.4 31.9,-71.3 71.3,-71.3h71.3v71.3c0,39.4 -31.9,71.3 -71.3,71.3S91.5,399.9 91.5,360.5z"/>
+</vector>

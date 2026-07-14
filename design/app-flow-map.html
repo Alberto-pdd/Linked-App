@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Linked — Mapa de flujo de la app</title>
+<style>
+  :root {
+    --bg: #f5f5f7;
+    --surface: #ffffff;
+    --fg: #1d1d1f;
+    --muted: #6e6e73;
+    --border: #d2d2d7;
+    --accent: #0071e3;
+    --accent2: #0066cc;
+    --success: #30d158;
+    --warn: #ff9f0a;
+    --danger: #ff453a;
+    --built-bg: #e8f8ee;
+    --built-border: #30d158;
+    --stub-bg: #fff4e5;
+    --stub-border: #ff9f0a;
+    --radius: 8px;
+    font-family: system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    padding: 40px 24px 80px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 1100px; margin: 0 auto; }
+
+  header { margin-bottom: 48px; }
+  header h1 {
+    font-size: 40px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+  header p {
+    font-size: 17px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  header .badge {
+    display: inline-block;
+    margin-top: 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 6px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+  }
+  header .badge strong { color: var(--accent); }
+
+  .legend {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 36px;
+    flex-wrap: wrap;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .legend-item .swatch {
+    width: 14px; height: 14px;
+    border-radius: 4px;
+    border: 1.5px solid;
+  }
+  .legend-item .swatch.built { background: var(--built-bg); border-color: var(--built-border); }
+  .legend-item .swatch.stub { background: var(--stub-bg); border-color: var(--stub-border); }
+  .legend-item .swatch.missing { background: #f2f2f7; border-color: var(--border); border-style: dashed; }
+
+  .flow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  .screen {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 28px;
+    width: 420px;
+    max-width: 100%;
+    text-align: center;
+    position: relative;
+    transition: box-shadow 0.2s;
+  }
+  .screen:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.06); }
+  .screen.built { border-color: var(--built-border); background: var(--built-bg); }
+  .screen.stub { border-color: var(--stub-border); background: var(--stub-bg); }
+  .screen .screen-title {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    margin-bottom: 4px;
+  }
+  .screen .screen-route {
+    font-family: 'SF Mono', 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.02em;
+    margin-bottom: 6px;
+  }
+  .screen .screen-status {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 999px;
+  }
+  .screen.built .screen-status { background: #b8e5c8; color: #004d1a; }
+  .screen.stub .screen-status { background: #ffd9a3; color: #8a5200; }
+  .screen .screen-file {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 4px;
+    font-family: 'SF Mono', 'JetBrains Mono', ui-monospace, monospace;
+  }
+
+  .arrow-down {
+    width: 0; height: 32px;
+    border-left: 2px dashed var(--border);
+    margin: -1px 0;
+    position: relative;
+  }
+  .arrow-down.solid { border-left-style: solid; }
+  .arrow-down::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: -5px;
+    width: 8px; height: 8px;
+    border-right: 2px solid var(--border);
+    border-bottom: 2px solid var(--border);
+    transform: rotate(45deg);
+  }
+  .arrow-down.solid::after { border-color: var(--muted); }
+
+  .arrow-label {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-weight: 500;
+    margin: -8px 0 -4px;
+    background: var(--bg);
+    padding: 0 8px;
+    z-index: 1;
+    position: relative;
+  }
+
+  .branch {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    position: relative;
+  }
+  .branch-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    max-width: 420px;
+  }
+  .branch::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: calc(50% + 16px);
+    height: 32px;
+    border-left: 2px dashed var(--border);
+    border-bottom: 2px dashed var(--border);
+    transform: translateX(-100%);
+  }
+  .branch::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 50%;
+    width: calc(50% + 16px);
+    height: 32px;
+    border-right: 2px dashed var(--border);
+    border-bottom: 2px dashed var(--border);
+    transform: translateX(100%);
+  }
+
+  /* Summary card */
+  .summary {
+    margin-top: 56px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+  .summary h2 {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    margin-bottom: 16px;
+    grid-column: 1 / -1;
+  }
+  .summary h3 {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .summary ul {
+    list-style: none;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .summary ul li {
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .summary ul li:last-child { border-bottom: none; }
+  .summary .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .dot.green { background: var(--built-border); }
+  .dot.orange { background: var(--warn); }
+  .dot.gray { background: var(--border); }
+
+  .missing-cta {
+    margin-top: 24px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff;
+    border: none;
+    border-radius: var(--radius);
+    padding: 16px 28px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    grid-column: 1 / -1;
+    text-align: center;
+  }
+  .missing-cta:hover { opacity: 0.9; }
+
+  @media (max-width: 700px) {
+    body { padding: 24px 16px 60px; }
+    header h1 { font-size: 28px; }
+    .screen { width: 100%; padding: 16px 20px; }
+    .branch { flex-direction: column; align-items: center; gap: 0; }
+    .branch::before, .branch::after { display: none; }
+    .summary { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>Linked — Mapa de flujo de la app</h1>
+  <p>7 rutas definidas en el NavHost · 5 pantallas completas · 2 pendientes</p>
+  <div class="badge">Basado en <strong>Screen.kt</strong> + <strong>NavGraph.kt</strong></div>
+</header>
+
+<div class="legend">
+  <span class="legend-item"><span class="swatch built"></span> Pantalla completa</span>
+  <span class="legend-item"><span class="swatch stub"></span> Stub / placeholder</span>
+  <span class="legend-item"><span class="swatch missing"></span> No implementada</span>
+</div>
+
+<div class="flow">
+
+  <!-- Splash -->
+  <div class="screen built">
+    <div class="screen-title">Splash</div>
+    <div class="screen-route">splash</div>
+    <span class="screen-status">Completa</span>
+    <div class="screen-file">SplashScreen.kt + SplashViewModel.kt</div>
+  </div>
+  <div class="arrow-down solid"></div>
+  <div class="arrow-label">Auto⏤⏤⏤⏤⏤⏤⏤⏤⏤⏤⏤⏤⏤⏤ sesión</div>
+  <div class="arrow-down solid"></div>
+
+  <!-- Branch: Login or Home -->
+  <div class="branch">
+    <div class="branch-col">
+      <div class="arrow-down solid" style="height:0;border-left:none;"></div>
+      <div class="screen built">
+        <div class="screen-title">Login</div>
+        <div class="screen-route">login</div>
+        <span class="screen-status">Completa</span>
+        <div class="screen-file">LoginScreen.kt + LoginViewModel.kt</div>
+      </div>
+      <div class="arrow-down solid"></div>
+      <div class="arrow-label">Google Sign-In</div>
+      <div class="arrow-down solid"></div>
+    </div>
+    <div class="branch-col">
+      <div class="arrow-down solid" style="height:0;border-left:none;"></div>
+      <div class="screen built">
+        <div class="screen-title">Home</div>
+        <div class="screen-route">home</div>
+        <span class="screen-status">Completa</span>
+        <div class="screen-file">HomeScreen.kt + HomeViewModel.kt</div>
+      </div>
+
+      <!-- Home sub-navigation -->
+      <div class="arrow-down solid"></div>
+      <div class="arrow-label">Dashboard principal</div>
+      <div class="arrow-down" style="height:16px;"></div>
+
+      <div class="branch">
+        <div class="branch-col">
+          <div class="arrow-down solid" style="height:0;border-left:none;"></div>
+          <div class="screen built" style="width:90%;">
+            <div class="screen-title">All Links</div>
+            <div class="screen-route">all_links</div>
+            <span class="screen-status">Completa</span>
+            <div class="screen-file">AllLinksScreen.kt + ViewModel</div>
+          </div>
+        </div>
+        <div class="branch-col">
+          <div class="arrow-down solid" style="height:0;border-left:none;"></div>
+          <div class="screen built" style="width:90%;">
+            <div class="screen-title">All Folders</div>
+            <div class="screen-route">all_folders</div>
+            <span class="screen-status">Completa</span>
+            <div class="screen-file">AllFoldersScreen.kt + ViewModel</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="arrow-down" style="height:16px;"></div>
+      <div class="screen stub">
+        <div class="screen-title">Settings</div>
+        <div class="screen-route">settings</div>
+        <span class="screen-status">Stub — sin implementar</span>
+        <div class="screen-file">PlaceholderScreen("Settings")</div>
+      </div>
+
+      <div class="arrow-down" style="height:16px;"></div>
+      <div class="screen stub">
+        <div class="screen-title">Link Detail</div>
+        <div class="screen-route">link_detail/{linkId}</div>
+        <span class="screen-status">Stub — sin implementar</span>
+        <div class="screen-file">PlaceholderScreen("Link Detail: $linkId")</div>
+        <div style="font-size:11px;color:var(--warn);margin-top:6px;font-weight:500;">⚠️ LinkCard.onClick es un comentario sin navegación</div>
+      </div>
+
+      <div class="arrow-down" style="height:16px;"></div>
+      <div class="screen" style="border-style:dashed;border-color:var(--border);background:transparent;opacity:0.6;">
+        <div class="screen-title" style="color:var(--muted);">¿Pantalla de búsqueda global?</div>
+        <div class="screen-route">— no definida</div>
+        <span class="screen-status" style="background:#e8e8ed;color:var(--muted);">No planificada</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Summary -->
+<div class="summary">
+  <h2>Resumen del análisis</h2>
+
+  <div>
+    <h3><span class="dot green" style="display:inline-block;"></span> Completas (5/7)</h3>
+    <ul>
+      <li><span class="dot green"></span> <strong>Splash</strong> — animación + auto-redirección por sesión</li>
+      <li><span class="dot green"></span> <strong>Login</strong> — Google Sign-In con card flotante</li>
+      <li><span class="dot green"></span> <strong>Home</strong> — dashboard con links, carpetas, búsqueda</li>
+      <li><span class="dot green"></span> <strong>All Links</strong> — CRUD completo + búsqueda + filtros</li>
+      <li><span class="dot green"></span> <strong>All Folders</strong> — CRUD completo + búsqueda</li>
+    </ul>
+  </div>
+
+  <div>
+    <h3><span class="dot orange" style="display:inline-block;"></span> Pendientes / Stubs (2/7)</h3>
+    <ul>
+      <li><span class="dot orange"></span> <strong>Settings</strong> — ruta definida pero solo muestra "Settings"</li>
+      <li><span class="dot orange"></span> <strong>Link Detail</strong> — ruta con parámetro linkId, muestra placeholder</li>
+    </ul>
+    <div style="margin-top:16px;font-size:13px;color:var(--muted);line-height:1.5;">
+      <strong style="color:var(--warn);">⚠️ Problema adicional:</strong> En HomeScreen.kt, el onClick de LinkCard es un comentario <code>/* Fase 10: link detail */</code> — ni siquiera navega a la ruta link_detail.
+    </div>
+  </div>
+
+  <div style="grid-column:1/-1;margin-top:8px;">
+    <h3 style="font-size:15px;">Componentes reutilizables ya construidos (9)</h3>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;font-size:13px;">
+      <div style="background:var(--bg);border-radius:8px;padding:8px 12px;">SearchBar</div>
+      <div style="background:var(--bg);border-radius:8px;padding:8px 12px;">TopNav</div>
+      <div style="background:var(--bg);border-radius:8px;padding:8px 12px;">LinkCard</div>
+      <div style="background:var(--bg);border-radius:8px;padding:8px 12px;">FolderCard</div>
+      <div style="background:var(--bg);border-radius:8px;padding:8px 12px;">FilterChips</div>
+      <div style="background:var(--bg);border-radius:8px;padding:8px 12px;">ColorPicker</div>
+      <div style="background:var(--bg);border-radius:8px;padding:8px 12px;">EmojiPicker</div>
+      <div style="background:var(--bg);border-radius:8px;padding:8px 12px;">DeleteConfirmDialog</div>
+      <div style="background:var(--bg);border-radius:8px;padding:8px 12px;">Toast</div>
+    </div>
+  </div>
+
+  <div class="missing-cta">
+    🚀 Faltan: Settings + Link Detail · <strong>2 pantallas por implementar</strong> · LinkCard sin navegación hacia LinkDetail
+  </div>
+</div>
+
+</div>
+</body>
+</html>
