@@ -8,7 +8,6 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
 import pdalbert.apps.linked.data.model.User
 import java.util.UUID
 
@@ -31,9 +30,8 @@ class SessionManager(private val context: Context) {
     }
 
     suspend fun isLoggedIn(): Boolean {
-        return context.dataStore.data.map { preferences ->
-            preferences[Keys.IS_LOGGED_IN] ?: false
-        }.first()
+        val prefs = context.dataStore.data.first()
+        return prefs[Keys.IS_LOGGED_IN] ?: false
     }
 
     suspend fun saveSession(user: User) {
@@ -46,23 +44,23 @@ class SessionManager(private val context: Context) {
     }
 
     suspend fun getSession(): SessionData? {
-        return context.dataStore.data.map { preferences ->
-            val isLoggedIn = preferences[Keys.IS_LOGGED_IN] ?: false
-            if (!isLoggedIn) return@map null
+        val prefs = context.dataStore.data.first()
+        val isLoggedIn = prefs[Keys.IS_LOGGED_IN] ?: false
+        if (!isLoggedIn) return null
 
-            SessionData(
-                isLoggedIn = true,
-                userId = preferences[Keys.USER_ID],
-                userName = preferences[Keys.USER_NAME],
-                userEmail = preferences[Keys.USER_EMAIL]
-            )
-        }.first()
+        return SessionData(
+            isLoggedIn = true,
+            userId = prefs[Keys.USER_ID],
+            userName = prefs[Keys.USER_NAME],
+            userEmail = prefs[Keys.USER_EMAIL]
+        )
     }
 
     suspend fun getUser(): User? {
         val session = getSession() ?: return null
+        val userId = session.userId ?: return null
         return User(
-            id = UUID.fromString(session.userId),
+            id = UUID.fromString(userId),
             name = session.userName ?: "",
             email = session.userEmail ?: ""
         )
