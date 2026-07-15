@@ -45,6 +45,7 @@ import pdalbert.apps.linked.ui.theme.Danger
 import pdalbert.apps.linked.ui.theme.Ink
 import pdalbert.apps.linked.ui.theme.InkMuted
 import pdalbert.apps.linked.ui.theme.Manrope
+import pdalbert.apps.linked.viewmodel.AllFoldersViewModel
 
 @Composable
 fun AllFoldersScreen(

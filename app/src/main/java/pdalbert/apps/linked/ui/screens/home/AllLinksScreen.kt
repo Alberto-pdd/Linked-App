@@ -49,6 +49,7 @@ import pdalbert.apps.linked.ui.theme.Ink
 import pdalbert.apps.linked.ui.theme.InkMuted
 import pdalbert.apps.linked.ui.theme.Manrope
 import pdalbert.apps.linked.ui.theme.Surface
+import pdalbert.apps.linked.viewmodel.AllLinksViewModel
 
 @Composable
 fun AllLinksScreen(

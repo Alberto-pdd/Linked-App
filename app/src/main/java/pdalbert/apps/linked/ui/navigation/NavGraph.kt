@@ -18,20 +18,20 @@ import pdalbert.apps.linked.data.local.SessionManager
 import pdalbert.apps.linked.data.repository.FolderRepository
 import pdalbert.apps.linked.data.repository.LinkRepository
 import pdalbert.apps.linked.ui.screens.home.AllFoldersScreen
-import pdalbert.apps.linked.ui.screens.home.AllFoldersViewModel
-import pdalbert.apps.linked.ui.screens.home.AllFoldersViewModelFactory
 import pdalbert.apps.linked.ui.screens.home.AllLinksScreen
-import pdalbert.apps.linked.ui.screens.home.AllLinksViewModel
-import pdalbert.apps.linked.ui.screens.home.AllLinksViewModelFactory
 import pdalbert.apps.linked.ui.screens.home.HomeScreen
-import pdalbert.apps.linked.ui.screens.home.HomeViewModel
-import pdalbert.apps.linked.ui.screens.home.HomeViewModelFactory
 import pdalbert.apps.linked.ui.screens.login.LoginScreen
-import pdalbert.apps.linked.ui.screens.login.LoginViewModel
-import pdalbert.apps.linked.ui.screens.login.LoginViewModelFactory
 import pdalbert.apps.linked.ui.screens.splash.SplashScreen
-import pdalbert.apps.linked.ui.screens.splash.SplashViewModel
-import pdalbert.apps.linked.ui.screens.splash.SplashViewModelFactory
+import pdalbert.apps.linked.viewmodel.AllFoldersViewModel
+import pdalbert.apps.linked.viewmodel.AllFoldersViewModelFactory
+import pdalbert.apps.linked.viewmodel.AllLinksViewModel
+import pdalbert.apps.linked.viewmodel.AllLinksViewModelFactory
+import pdalbert.apps.linked.viewmodel.HomeViewModel
+import pdalbert.apps.linked.viewmodel.HomeViewModelFactory
+import pdalbert.apps.linked.viewmodel.LoginViewModel
+import pdalbert.apps.linked.viewmodel.LoginViewModelFactory
+import pdalbert.apps.linked.viewmodel.SplashViewModel
+import pdalbert.apps.linked.viewmodel.SplashViewModelFactory
 
 @Composable
 fun NavGraph(
