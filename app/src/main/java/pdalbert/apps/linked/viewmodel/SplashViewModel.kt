@@ -1,4 +1,4 @@
-package pdalbert.apps.linked.ui.screens.splash
+package pdalbert.apps.linked.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
