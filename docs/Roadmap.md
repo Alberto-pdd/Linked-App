@@ -385,3 +385,22 @@ POST   /api/auth/google    → User + token
 ```
 
 ---
+
+## Pendiente: Google Sign-In
+
+**Estado:** No implementado
+
+**Descripción:** El login actual es fake (hardcoded). Hay que implementar Google Sign-In real cuando se configure Firebase.
+
+**Archivos a modificar:**
+- `ui/screens/login/LoginScreen.kt` — Reemplazar `.clickable { viewModel.onGoogleSignInSuccess("Usuario", "test@linked.com") }` con llamada real a Google
+- `ui/screens/login/LoginViewModel.kt` — Añadir lógica de Google Sign-In
+- `app/build.gradle.kts` — Añadir dependencias de Credential Manager
+
+**Dependencias:**
+- Firebase project configurado
+- Google Cloud Console con OAuth 2.0 credentials
+- SHA-1 fingerprint registrado
+
+**Referencia:** Roadmap Phase 5 (Login) — actualmente incompleto
+---
