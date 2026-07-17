@@ -14,6 +14,7 @@
     --muted: #6B6B66;
     --deco: #7A7A74;
     --accent: #3B82C4;
+    --accent2: #2563EB;
     --accent-bg: #EBF3FB;
     --border: #E2E1DC;
     --border-light: #EFEEEA;
@@ -166,25 +167,6 @@
     color: var(--fg);
   }
   .search-bar input::placeholder { color: var(--deco); }
-  .search-bar input::-webkit-search-cancel-button,
-  .search-bar input::-webkit-search-decoration { -webkit-appearance: none; margin: 0; }
-
-  .search-clear {
-    width: 32px; height: 32px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    background: none;
-    border: none;
-    color: var(--deco);
-    font-family: inherit;
-    font-size: 16px;
-    flex-shrink: 0;
-    transition: background 0.15s;
-  }
-  .search-clear:hover { background: var(--border-light); }
 
   /* ============ TAG FILTERS ============ */
   .tag-filters {
@@ -217,39 +199,48 @@
   /* ============ SECTION HEADER ============ */
   .section-header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: 0 20px 8px;
+    justify-content: space-between;
+    padding: 4px 20px 12px;
     flex-shrink: 0;
+  }
+  /* ============ FOLDERS TOP ELEVATION ============ */
+  .folders-section {
+    margin-top: -24px;
+    padding-top: 24px;
+    max-height: 385px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    background: var(--bg);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    box-shadow: 0 -2px 16px rgba(0,0,0,0.06);
+  }
+  .content > .scroll-section:first-of-type {
+    position: relative;
+    z-index: 1;
   }
   .section-header .left {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
   }
   .section-title {
-    font-size: 13px;
+    font-size: 18px;
     font-weight: 700;
     color: var(--fg);
-    letter-spacing: 0.01em;
+    letter-spacing: -0.3px;
+    line-height: 1.2;
   }
-  .see-all-btn {
-    font-size: 12px;
+  .section-badge {
+    font-size: 11px;
     font-weight: 600;
-    color: var(--accent);
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-family: inherit;
-    letter-spacing: 0.01em;
-    transition: opacity 0.15s;
-  }
-  .see-all-btn:hover { opacity: 0.7; }
-
-  /* ============ FILTER DROPDOWN ============ */
-  .filter-dropdown {
-    position: relative;
-    display: inline-block;
+    color: var(--deco);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 99px;
+    padding: 1px 8px;
+    line-height: 18px;
   }
   .section-filter-btn {
     font-size: 11px;
@@ -260,7 +251,6 @@
     border-radius: 99px;
     padding: 2px 10px;
     line-height: 18px;
-    letter-spacing: 0.01em;
     cursor: pointer;
     font-family: inherit;
     display: inline-flex;
@@ -270,25 +260,31 @@
     white-space: nowrap;
   }
   .section-filter-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .section-filter-btn svg { flex-shrink: 0; }
   .sort-dir-btn {
-    border-radius: 99px;
+    width: 22px; height: 22px;
+    border-radius: 50%;
     border: 1px solid var(--border);
     background: var(--surface);
     color: var(--deco);
-    font-size: 11px;
+    font-size: 13px;
     font-weight: 600;
-    letter-spacing: 0.01em;
     display: inline-flex;
     align-items: center;
-    gap: 4px;
+    justify-content: center;
     cursor: pointer;
     font-family: inherit;
-    padding: 2px 10px;
-    line-height: 18px;
+    padding: 0;
+    line-height: 1;
     transition: all 0.15s;
-    white-space: nowrap;
   }
   .sort-dir-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .filter-dropdown + .sort-dir-btn { margin-left: -4px; }
+
+  .filter-dropdown {
+    position: relative;
+    display: inline-block;
+  }
   .filter-dropdown-menu {
     position: absolute;
     top: calc(100% + 6px);
@@ -328,6 +324,18 @@
   }
   .filter-dropdown-overlay.open { display: block; }
 
+  .see-all-btn {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    cursor: pointer;
+    transition: opacity 0.15s;
+    background: none;
+    border: none;
+    font-family: inherit;
+  }
+  .see-all-btn:hover { opacity: 0.7; }
+
   /* ============ LINK CARD ============ */
   .link-list { padding: 0 20px; display: flex; flex-direction: column; gap: 10px; }
   .link-card {
@@ -362,19 +370,13 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  .link-time {
-    font-size: 11px;
-    color: var(--deco);
-    line-height: 1.3;
-    letter-spacing: 0.01em;
-  }
   .link-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+
   .link-tag {
     border-radius: 99px;
     padding: 3px 10px;
     font-size: 11px;
     font-weight: 600;
-    letter-spacing: 0.01em;
     line-height: 1.3;
     white-space: nowrap;
   }
@@ -394,15 +396,7 @@
   }
   .link-more:hover { background: var(--border-light); }
 
-  /* ============ TAG COLORS ============ */
-  .link-tag.tag-diseno { background: var(--yellow-bg); color: #92630A; }
-  .link-tag.tag-ia { background: var(--green-bg); color: var(--success); }
-  .link-tag.tag-dev { background: var(--purple-bg); color: #5B21B6; }
-  .link-tag.tag-video { background: #FEF3C7; color: #92630A; }
-  .link-tag.tag-noticias { background: var(--accent-bg); color: #1E40AF; }
-
-  /* ============ FOLDERS SECTION ============ */
-  .folders-section { padding-bottom: 8px; }
+  /* ============ FOLDER CARD ============ */
   .folder-list { padding: 0 20px; display: flex; flex-direction: column; gap: 10px; }
   .folder-card {
     display: flex;
@@ -411,36 +405,34 @@
     background: var(--surface);
     border: 1.5px solid var(--border);
     border-radius: var(--radius-md);
-    padding: 12px 16px;
+    padding: 14px 16px;
     cursor: pointer;
     transition: all 0.15s;
   }
   .folder-card:hover { border-color: var(--accent); box-shadow: 0 2px 8px rgba(59,130,196,0.08); }
   .folder-emoji-box {
-    width: 40px; height: 40px;
+    width: 42px; height: 42px;
     border-radius: var(--radius-sm);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 18px;
+    font-size: 20px;
     flex-shrink: 0;
   }
   .folder-body { flex: 1; min-width: 0; }
   .folder-name {
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 700;
     color: var(--fg);
-    letter-spacing: -0.2px;
+    letter-spacing: -0.3px;
     line-height: 1.4;
   }
   .folder-meta {
-    font-size: 11px;
-    color: var(--deco);
+    font-size: 12px;
+    color: var(--muted);
     line-height: 1.3;
-    letter-spacing: 0.01em;
     margin-top: 2px;
   }
-  .folder-right { display: flex; align-items: center; flex-shrink: 0; }
   .folder-more {
     width: 32px; height: 32px;
     border-radius: 50%;
@@ -456,8 +448,36 @@
     font-size: 16px;
   }
   .folder-more:hover { background: var(--border-light); }
+  .folder-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
 
-  /* ============ EMPTY STATE ============ */
+  .link-time {
+    font-size: 11px;
+    color: var(--deco);
+    line-height: 1.3;
+    margin-top: 4px;
+  }
+
+  .search-clear {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background: none;
+    border: none;
+    color: var(--deco);
+    font-family: inherit;
+    font-size: 16px;
+    flex-shrink: 0;
+    transition: background 0.15s;
+  }
+  .search-clear:hover { background: var(--border-light); }
+
   .empty-state {
     display: none;
     flex-direction: column;
@@ -568,7 +588,7 @@
                   <button class="filter-dropdown-item selected" data-value="Esta semana">Esta semana</button>
                   <button class="filter-dropdown-item" data-value="Este mes">Este mes</button>
                 </div>
-              </span><button class="sort-dir-btn" data-od-id="links-sort-dir" aria-label="Cambiar orden"><span data-od-id="sort-label">Fecha</span> <span data-od-id="sort-arrow">↓</span></button>
+              </span><button class="sort-dir-btn" data-od-id="links-sort-dir" aria-label="Cambiar orden">↓</button>
             </div>
             <button class="see-all-btn" data-od-id="see-all-links">Ver todos →</button>
           </div>
@@ -582,7 +602,7 @@
               <div class="link-time">hace 2 h</div>
             </div>
             <div class="link-right">
-              <div class="link-tag tag-diseno">diseño</div>
+              <div class="link-tag" style="background:#FEF3C7;color:#92630A;">diseño</div>
               <button class="link-more" aria-label="Más opciones">⋯</button>
             </div>
           </div>
@@ -594,7 +614,7 @@
               <div class="link-time">hace 6 h</div>
             </div>
             <div class="link-right">
-              <div class="link-tag tag-ia">ia</div>
+              <div class="link-tag" style="background:#DCFCE7;color:#166534;">ia</div>
               <button class="link-more" aria-label="Más opciones">⋯</button>
             </div>
           </div>
@@ -606,7 +626,7 @@
               <div class="link-time">ayer</div>
             </div>
             <div class="link-right">
-              <div class="link-tag tag-dev">dev</div>
+              <div class="link-tag" style="background:#EDE9FE;color:#5B21B6;">dev</div>
               <button class="link-more" aria-label="Más opciones">⋯</button>
             </div>
           </div>
@@ -618,7 +638,7 @@
               <div class="link-time">hace 2 d</div>
             </div>
             <div class="link-right">
-              <div class="link-tag tag-video">video</div>
+              <div class="link-tag" style="background:#FEF3C7;color:#92630A;">video</div>
               <button class="link-more" aria-label="Más opciones">⋯</button>
             </div>
           </div>
@@ -630,7 +650,7 @@
               <div class="link-time">hace 3 d</div>
             </div>
             <div class="link-right">
-              <div class="link-tag tag-noticias">noticias</div>
+              <div class="link-tag" style="background:#EBF3FB;color:#1E40AF;">noticias</div>
               <button class="link-more" aria-label="Más opciones">⋯</button>
             </div>
           </div>
@@ -642,7 +662,7 @@
               <div class="link-time">hace 4 d</div>
             </div>
             <div class="link-right">
-              <div class="link-tag tag-diseno">diseño</div>
+              <div class="link-tag" style="background:#FEF3C7;color:#92630A;">diseño</div>
               <button class="link-more" aria-label="Más opciones">⋯</button>
             </div>
           </div>
@@ -877,7 +897,7 @@
 
   linkSortDir.addEventListener('click', () => {
     linkAsc = !linkAsc;
-    linkSortDir.querySelector('[data-od-id="sort-arrow"]').textContent = linkAsc ? '↑' : '↓';
+    linkSortDir.textContent = linkAsc ? '↑' : '↓';
     applyAllFilters();
   });
 
