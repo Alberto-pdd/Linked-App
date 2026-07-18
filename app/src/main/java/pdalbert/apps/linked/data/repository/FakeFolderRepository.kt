@@ -5,8 +5,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 import pdalbert.apps.linked.data.model.Folder
 import java.util.UUID
+import javax.inject.Inject
 
-class FakeFolderRepository : FolderRepository {
+class FakeFolderRepository @Inject constructor() : FolderRepository {
 
     private val folders = mutableListOf<Folder>()
     private val _folders = MutableStateFlow<List<Folder>>(emptyList())

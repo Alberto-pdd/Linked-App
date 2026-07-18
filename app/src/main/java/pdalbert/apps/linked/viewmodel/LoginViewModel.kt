@@ -1,15 +1,19 @@
 package pdalbert.apps.linked.viewmodel
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import pdalbert.apps.linked.data.local.SessionManager
 import pdalbert.apps.linked.data.model.User
+import javax.inject.Inject
 
-class LoginViewModel(private val sessionManager: SessionManager) : ViewModel() {
+@HiltViewModel
+class LoginViewModel @Inject constructor(
+    private val sessionManager: SessionManager
+) : ViewModel() {
 
     private val _navigationEvent = MutableStateFlow<String?>(null)
     val navigationEvent: StateFlow<String?> = _navigationEvent
@@ -24,12 +28,5 @@ class LoginViewModel(private val sessionManager: SessionManager) : ViewModel() {
 
     fun onGoogleSignInError(error: String) {
         // Handle error (show toast, etc.)
-    }
-}
-
-class LoginViewModelFactory(private val sessionManager: SessionManager) : ViewModelProvider.Factory {
-    @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return LoginViewModel(sessionManager) as T
     }
 }

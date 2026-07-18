@@ -5,8 +5,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 import pdalbert.apps.linked.data.model.Link
 import java.util.UUID
+import javax.inject.Inject
 
-class FakeLinkRepository : LinkRepository {
+class FakeLinkRepository @Inject constructor() : LinkRepository {
 
     private val links = mutableListOf<Link>()
     private val _links = MutableStateFlow<List<Link>>(emptyList())

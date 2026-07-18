@@ -8,53 +8,38 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import pdalbert.apps.linked.data.local.SessionManager
-import pdalbert.apps.linked.data.repository.FolderRepository
-import pdalbert.apps.linked.data.repository.LinkRepository
 import pdalbert.apps.linked.ui.screens.home.AllFoldersScreen
 import pdalbert.apps.linked.ui.screens.home.AllLinksScreen
 import pdalbert.apps.linked.ui.screens.home.HomeScreen
 import pdalbert.apps.linked.ui.screens.login.LoginScreen
 import pdalbert.apps.linked.ui.screens.splash.SplashScreen
 import pdalbert.apps.linked.viewmodel.AllFoldersViewModel
-import pdalbert.apps.linked.viewmodel.AllFoldersViewModelFactory
 import pdalbert.apps.linked.viewmodel.AllLinksViewModel
-import pdalbert.apps.linked.viewmodel.AllLinksViewModelFactory
 import pdalbert.apps.linked.viewmodel.HomeViewModel
-import pdalbert.apps.linked.viewmodel.HomeViewModelFactory
 import pdalbert.apps.linked.viewmodel.LoginViewModel
-import pdalbert.apps.linked.viewmodel.LoginViewModelFactory
 import pdalbert.apps.linked.viewmodel.SplashViewModel
-import pdalbert.apps.linked.viewmodel.SplashViewModelFactory
 
 @Composable
 fun NavGraph(
-    navController: NavHostController,
-    sessionManager: SessionManager,
-    linkRepository: LinkRepository,
-    folderRepository: FolderRepository
+    navController: NavHostController
 ) {
     NavHost(
         navController = navController,
         startDestination = Screen.Splash.route
     ) {
         composable(Screen.Splash.route) {
-            val splashViewModel: SplashViewModel = viewModel(
-                factory = SplashViewModelFactory(sessionManager)
-            )
+            val splashViewModel: SplashViewModel = hiltViewModel()
             SplashScreen(navController = navController, viewModel = splashViewModel)
         }
 
         composable(Screen.Login.route) {
-            val loginViewModel: LoginViewModel = viewModel(
-                factory = LoginViewModelFactory(sessionManager)
-            )
+            val loginViewModel: LoginViewModel = hiltViewModel()
 
             LaunchedEffect(loginViewModel.navigationEvent) {
                 loginViewModel.navigationEvent.collect { destination ->
@@ -70,9 +55,7 @@ fun NavGraph(
         }
 
         composable(Screen.Home.route) {
-            val homeViewModel: HomeViewModel = viewModel(
-                factory = HomeViewModelFactory(sessionManager, linkRepository, folderRepository)
-            )
+            val homeViewModel: HomeViewModel = hiltViewModel()
             HomeScreen(navController = navController, viewModel = homeViewModel)
         }
 
@@ -81,16 +64,12 @@ fun NavGraph(
         }
 
         composable(Screen.AllLinks.route) {
-            val allLinksViewModel: AllLinksViewModel = viewModel(
-                factory = AllLinksViewModelFactory(linkRepository)
-            )
+            val allLinksViewModel: AllLinksViewModel = hiltViewModel()
             AllLinksScreen(navController = navController, viewModel = allLinksViewModel)
         }
 
         composable(Screen.AllFolders.route) {
-            val allFoldersViewModel: AllFoldersViewModel = viewModel(
-                factory = AllFoldersViewModelFactory(folderRepository)
-            )
+            val allFoldersViewModel: AllFoldersViewModel = hiltViewModel()
             AllFoldersScreen(navController = navController, viewModel = allFoldersViewModel)
         }
 

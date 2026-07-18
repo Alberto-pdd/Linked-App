@@ -1,8 +1,8 @@
 package pdalbert.apps.linked.viewmodel
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -12,8 +12,10 @@ import kotlinx.coroutines.launch
 import pdalbert.apps.linked.data.model.Link
 import pdalbert.apps.linked.data.repository.LinkRepository
 import java.util.UUID
+import javax.inject.Inject
 
-class AllLinksViewModel(
+@HiltViewModel
+class AllLinksViewModel @Inject constructor(
     private val linkRepository: LinkRepository
 ) : ViewModel() {
 
@@ -113,14 +115,5 @@ class AllLinksViewModel(
 
     fun onBackClicked() {
         // Handled by NavController
-    }
-}
-
-class AllLinksViewModelFactory(
-    private val linkRepository: LinkRepository
-) : ViewModelProvider.Factory {
-    @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return AllLinksViewModel(linkRepository) as T
     }
 }
