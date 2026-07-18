@@ -13,7 +13,7 @@ lifecycleViewModelCompose = "2.7.0"
 googleIdentity = "1.1.0"
 kotlinxSerialization = "1.6.3"
 datastorePreferences = "1.1.1"
-hilt = "2.48.1"
+hilt = "2.50"
 hiltNavigationCompose = "1.2.0"
 ksp = "2.0.21-1.0.28"
 
