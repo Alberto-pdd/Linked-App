@@ -1,8 +1,8 @@
 package pdalbert.apps.linked.viewmodel
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -14,8 +14,10 @@ import pdalbert.apps.linked.data.model.Folder
 import pdalbert.apps.linked.data.model.Link
 import pdalbert.apps.linked.data.repository.FolderRepository
 import pdalbert.apps.linked.data.repository.LinkRepository
+import javax.inject.Inject
 
-class HomeViewModel(
+@HiltViewModel
+class HomeViewModel @Inject constructor(
     private val sessionManager: SessionManager,
     private val linkRepository: LinkRepository,
     private val folderRepository: FolderRepository
@@ -76,16 +78,5 @@ class HomeViewModel(
 
     fun onNavigationHandled() {
         _navigationEvent.value = null
-    }
-}
-
-class HomeViewModelFactory(
-    private val sessionManager: SessionManager,
-    private val linkRepository: LinkRepository,
-    private val folderRepository: FolderRepository
-) : ViewModelProvider.Factory {
-    @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return HomeViewModel(sessionManager, linkRepository, folderRepository) as T
     }
 }

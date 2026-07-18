@@ -1,8 +1,8 @@
 package pdalbert.apps.linked.viewmodel
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -12,8 +12,10 @@ import kotlinx.coroutines.launch
 import pdalbert.apps.linked.data.model.Folder
 import pdalbert.apps.linked.data.repository.FolderRepository
 import java.util.UUID
+import javax.inject.Inject
 
-class AllFoldersViewModel(
+@HiltViewModel
+class AllFoldersViewModel @Inject constructor(
     private val folderRepository: FolderRepository
 ) : ViewModel() {
 
@@ -92,14 +94,5 @@ class AllFoldersViewModel(
 
     fun onToastShown() {
         _toastMessage.value = null
-    }
-}
-
-class AllFoldersViewModelFactory(
-    private val folderRepository: FolderRepository
-) : ViewModelProvider.Factory {
-    @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return AllFoldersViewModel(folderRepository) as T
     }
 }
