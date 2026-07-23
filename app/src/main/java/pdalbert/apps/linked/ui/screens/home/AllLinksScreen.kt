@@ -22,7 +22,6 @@ import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -37,18 +36,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import pdalbert.apps.linked.ui.components.DeleteConfirmDialog
-import pdalbert.apps.linked.ui.components.FilterChips
 import pdalbert.apps.linked.ui.components.LinkCard
 import pdalbert.apps.linked.ui.components.SearchBar
-import pdalbert.apps.linked.ui.components.TopNav
+import pdalbert.apps.linked.ui.components.TagFilterChips
 import pdalbert.apps.linked.ui.components.Toast
 import pdalbert.apps.linked.ui.theme.Accent
 import pdalbert.apps.linked.ui.theme.Background
 import pdalbert.apps.linked.ui.theme.Danger
 import pdalbert.apps.linked.ui.theme.Ink
 import pdalbert.apps.linked.ui.theme.InkMuted
-import pdalbert.apps.linked.ui.theme.Manrope
-import pdalbert.apps.linked.ui.theme.Surface
+import pdalbert.apps.linked.ui.theme.Inter
 import pdalbert.apps.linked.viewmodel.AllLinksViewModel
 
 @Composable
@@ -58,8 +55,8 @@ fun AllLinksScreen(
 ) {
     val filteredLinks by viewModel.filteredLinks.collectAsState()
     val searchQuery by viewModel.searchQuery.collectAsState()
-    val activeTag by viewModel.activeTag.collectAsState()
-    val availableTags by viewModel.availableTags.collectAsState()
+    val activeTags by viewModel.activeTags.collectAsState()
+    val tags by viewModel.tags.collectAsState()
     val showAddSheet by viewModel.showAddSheet.collectAsState()
     val editingLink by viewModel.editingLink.collectAsState()
     val deleteLinkId by viewModel.deleteLinkId.collectAsState()
@@ -94,7 +91,7 @@ fun AllLinksScreen(
                     )
                     Text(
                         text = "Todos los links",
-                        fontFamily = Manrope,
+                        fontFamily = Inter,
                         fontWeight = FontWeight.ExtraBold,
                         fontSize = 20.sp,
                         color = Ink,
@@ -113,7 +110,7 @@ fun AllLinksScreen(
                 ) {
                     Text(
                         text = "+ Añadir",
-                        fontFamily = Manrope,
+                        fontFamily = Inter,
                         fontWeight = FontWeight.Bold,
                         fontSize = 13.sp,
                         color = Color.White
@@ -125,16 +122,18 @@ fun AllLinksScreen(
             SearchBar(
                 query = searchQuery,
                 onQueryChanged = viewModel::onSearchQueryChanged,
+                onClear = { viewModel.onSearchQueryChanged("") },
                 placeholder = "Buscar enlaces...",
                 modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)
             )
 
-            // Filter chips
-            if (availableTags.size > 1) {
-                FilterChips(
-                    tags = availableTags,
-                    activeTag = activeTag,
+            // Tag filter chips
+            if (tags.isNotEmpty()) {
+                TagFilterChips(
+                    tags = tags,
+                    activeTags = activeTags,
                     onTagSelected = viewModel::onTagSelected,
+                    onManageTags = { navController.navigate("tags") },
                     modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)
                 )
             }
@@ -142,7 +141,7 @@ fun AllLinksScreen(
             // Count
             Text(
                 text = "${filteredLinks.size} enlace${if (filteredLinks.size != 1) "s" else ""}",
-                fontFamily = Manrope,
+                fontFamily = Inter,
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 12.sp,
                 color = InkMuted,
@@ -162,7 +161,7 @@ fun AllLinksScreen(
                         Text(text = "\uD83D\uDD17", fontSize = 36.sp)
                         Text(
                             text = "Sin enlaces",
-                            fontFamily = Manrope,
+                            fontFamily = Inter,
                             fontWeight = FontWeight.ExtraBold,
                             fontSize = 16.sp,
                             color = Ink,
@@ -170,7 +169,7 @@ fun AllLinksScreen(
                         )
                         Text(
                             text = "Añade tu primer enlace\npulsando el botón de arriba.",
-                            fontFamily = Manrope,
+                            fontFamily = Inter,
                             fontWeight = FontWeight.Normal,
                             fontSize = 13.sp,
                             color = InkMuted,
@@ -216,7 +215,7 @@ fun AllLinksScreen(
                                             )
                                             Text(
                                                 text = "Editar",
-                                                fontFamily = Manrope,
+                                                fontFamily = Inter,
                                                 fontWeight = FontWeight.Bold,
                                                 fontSize = 10.5.sp,
                                                 color = Color.White
@@ -244,7 +243,7 @@ fun AllLinksScreen(
                                             )
                                             Text(
                                                 text = "Eliminar",
-                                                fontFamily = Manrope,
+                                                fontFamily = Inter,
                                                 fontWeight = FontWeight.Bold,
                                                 fontSize = 10.5.sp,
                                                 color = Color.White
@@ -256,6 +255,7 @@ fun AllLinksScreen(
 
                             LinkCard(
                                 link = link,
+                                timeAgo = viewModel.getTimeAgo(link.createdAt),
                                 onClick = {
                                     if (swipedLinkId == link.id.toString()) {
                                         swipedLinkId = null
