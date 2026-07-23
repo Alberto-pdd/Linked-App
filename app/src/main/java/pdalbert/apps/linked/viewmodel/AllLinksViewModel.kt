@@ -10,38 +10,43 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import pdalbert.apps.linked.data.model.Link
+import pdalbert.apps.linked.data.model.Tag
 import pdalbert.apps.linked.data.repository.LinkRepository
+import pdalbert.apps.linked.data.repository.TagRepository
+import kotlinx.datetime.Instant
 import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
 class AllLinksViewModel @Inject constructor(
-    private val linkRepository: LinkRepository
+    private val linkRepository: LinkRepository,
+    private val tagRepository: TagRepository
 ) : ViewModel() {
 
     val links: StateFlow<List<Link>> = linkRepository.getAll()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
+    val tags: StateFlow<List<Tag>> = tagRepository.getAll()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+
     private val _searchQuery = MutableStateFlow("")
     val searchQuery: StateFlow<String> = _searchQuery
 
-    private val _activeTag = MutableStateFlow("Todos")
-    val activeTag: StateFlow<String> = _activeTag
+    private val _activeTags = MutableStateFlow<List<String>>(emptyList())
+    val activeTags: StateFlow<List<String>> = _activeTags
 
-    val filteredLinks: StateFlow<List<Link>> = combine(links, _searchQuery, _activeTag) { allLinks, query, tag ->
+    val filteredLinks: StateFlow<List<Link>> = combine(links, _searchQuery, _activeTags) { allLinks, query, activeTags ->
         allLinks.filter { link ->
-            val matchesTag = tag == "Todos" || link.tag.equals(tag, ignoreCase = true)
+            val matchesTag = activeTags.isEmpty() || activeTags.any { tag -> 
+                link.title.contains(tag, ignoreCase = true) 
+            }
             val matchesQuery = query.isBlank() ||
                 link.title.contains(query, ignoreCase = true) ||
                 link.url.contains(query, ignoreCase = true) ||
-                link.tag.contains(query, ignoreCase = true)
+                link.description.contains(query, ignoreCase = true)
             matchesTag && matchesQuery
         }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
-
-    val availableTags: StateFlow<List<String>> = combine(links, _activeTag) { allLinks, _ ->
-        listOf("Todos") + allLinks.map { it.tag }.filter { it.isNotEmpty() }.distinct()
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), listOf("Todos"))
 
     private val _showAddSheet = MutableStateFlow(false)
     val showAddSheet: StateFlow<Boolean> = _showAddSheet
@@ -60,7 +65,13 @@ class AllLinksViewModel @Inject constructor(
     }
 
     fun onTagSelected(tag: String) {
-        _activeTag.value = tag
+        val current = _activeTags.value.toMutableList()
+        if (tag in current) {
+            current.remove(tag)
+        } else {
+            current.add(tag)
+        }
+        _activeTags.value = current
     }
 
     fun onAddClicked() {
@@ -115,5 +126,28 @@ class AllLinksViewModel @Inject constructor(
 
     fun onBackClicked() {
         // Handled by NavController
+    }
+
+    fun getTimeAgo(createdAt: Instant): String {
+        val now = kotlinx.datetime.Clock.System.now()
+        val duration = now - createdAt
+
+        val seconds = duration.inWholeSeconds
+        val minutes = seconds / 60
+        val hours = minutes / 60
+        val days = hours / 24
+        val weeks = days / 7
+        val months = days / 30
+        val years = days / 365
+
+        return when {
+            years > 0 -> if (years == 1L) "hace 1 año" else "hace $years años"
+            months > 0 -> if (months == 1L) "hace 1 mes" else "hace $months meses"
+            weeks > 0 -> if (weeks == 1L) "hace 1 semana" else "hace $weeks semanas"
+            days > 0 -> if (days == 1L) "hace 1 día" else "hace $days días"
+            hours > 0 -> if (hours == 1L) "hace 1 hora" else "hace $hours horas"
+            minutes > 0 -> if (minutes == 1L) "hace 1 minuto" else "hace $minutes minutos"
+            else -> "ahora mismo"
+        }
     }
 }
