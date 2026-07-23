@@ -128,6 +128,9 @@ class AllLinksViewModel @Inject constructor(
         // Handled by NavController
     }
 
+    fun getTagsForLink(linkId: UUID): kotlinx.coroutines.flow.Flow<List<pdalbert.apps.linked.data.model.Tag>> =
+        linkRepository.getTagsForLink(linkId)
+
     fun getTimeAgo(createdAt: Instant): String {
         val now = kotlinx.datetime.Clock.System.now()
         val duration = now - createdAt

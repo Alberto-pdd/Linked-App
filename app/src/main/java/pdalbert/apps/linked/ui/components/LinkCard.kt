@@ -111,30 +111,46 @@ fun LinkCard(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            // Tag pill (first tag)
-            tags.firstOrNull()?.let { tag ->
+            // Tag pill (first tag + remaining count indicator)
+            val firstTag = tags.firstOrNull()
+            val remainingCount = tags.size - 1
+            if (firstTag != null) {
                 val tagColor = try {
-                    TagColor.valueOf(tag.colorName)
+                    TagColor.valueOf(firstTag.colorName)
                 } catch (_: Exception) {
                     TagColor.DEFAULT
                 }
                 val bgColor = Color(android.graphics.Color.parseColor(tagColor.bgColor))
                 val fgColor = Color(android.graphics.Color.parseColor(tagColor.fgColor))
 
-                Box(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(100.dp))
-                        .background(bgColor)
-                        .padding(horizontal = 10.dp, vertical = 3.dp)
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
-                    Text(
-                        text = tag.name,
-                        fontFamily = Inter,
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 11.sp,
-                        color = fgColor,
-                        lineHeight = 16.sp
-                    )
+                    Box(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(100.dp))
+                            .background(bgColor)
+                            .padding(horizontal = 10.dp, vertical = 3.dp)
+                    ) {
+                        Text(
+                            text = firstTag.name,
+                            fontFamily = Inter,
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 11.sp,
+                            color = fgColor,
+                            lineHeight = 16.sp
+                        )
+                    }
+                    if (remainingCount > 0) {
+                        Text(
+                            text = "+$remainingCount",
+                            fontFamily = Inter,
+                            fontWeight = FontWeight.Medium,
+                            fontSize = 11.sp,
+                            color = InkDecorations
+                        )
+                    }
                 }
             }
 

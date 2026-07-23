@@ -185,6 +185,7 @@ fun AllLinksScreen(
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     items(filteredLinks, key = { it.id.toString() }) { link ->
+                        val linkTags by viewModel.getTagsForLink(link.id).collectAsState(emptyList())
                         Box {
                             // Swipe actions (behind the card)
                             if (swipedLinkId == link.id.toString()) {
@@ -255,6 +256,7 @@ fun AllLinksScreen(
 
                             LinkCard(
                                 link = link,
+                                tags = linkTags,
                                 timeAgo = viewModel.getTimeAgo(link.createdAt),
                                 onClick = {
                                     if (swipedLinkId == link.id.toString()) {
