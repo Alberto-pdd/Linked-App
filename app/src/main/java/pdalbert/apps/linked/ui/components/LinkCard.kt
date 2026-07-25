@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -28,6 +29,7 @@ import androidx.compose.ui.unit.sp
 import pdalbert.apps.linked.data.model.Link
 import pdalbert.apps.linked.data.model.Tag
 import pdalbert.apps.linked.data.model.TagColor
+import pdalbert.apps.linked.ui.theme.Accent
 import pdalbert.apps.linked.ui.theme.Border
 import pdalbert.apps.linked.ui.theme.Ink
 import pdalbert.apps.linked.ui.theme.InkDecorations
@@ -111,7 +113,7 @@ fun LinkCard(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            // Tag pill (first tag + remaining count indicator)
+            // Tag pill with badge indicator
             val firstTag = tags.firstOrNull()
             val remainingCount = tags.size - 1
             if (firstTag != null) {
@@ -123,10 +125,7 @@ fun LinkCard(
                 val bgColor = Color(android.graphics.Color.parseColor(tagColor.bgColor))
                 val fgColor = Color(android.graphics.Color.parseColor(tagColor.fgColor))
 
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(4.dp)
-                ) {
+                Box {
                     Box(
                         modifier = Modifier
                             .clip(RoundedCornerShape(100.dp))
@@ -142,14 +141,26 @@ fun LinkCard(
                             lineHeight = 16.sp
                         )
                     }
+
                     if (remainingCount > 0) {
-                        Text(
-                            text = "+$remainingCount",
-                            fontFamily = Inter,
-                            fontWeight = FontWeight.Medium,
-                            fontSize = 11.sp,
-                            color = InkDecorations
-                        )
+                        Box(
+                            modifier = Modifier
+                                .align(Alignment.TopEnd)
+                                .offset(x = 6.dp, y = (-4).dp)
+                                .size(16.dp)
+                                .clip(CircleShape)
+                                .background(Accent)
+                                .padding(2.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = "$remainingCount",
+                                fontFamily = Inter,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 8.sp,
+                                color = Color.White
+                            )
+                        }
                     }
                 }
             }
