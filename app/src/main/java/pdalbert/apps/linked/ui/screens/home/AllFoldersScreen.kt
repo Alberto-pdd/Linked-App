@@ -44,7 +44,7 @@ import pdalbert.apps.linked.ui.theme.Background
 import pdalbert.apps.linked.ui.theme.Danger
 import pdalbert.apps.linked.ui.theme.Ink
 import pdalbert.apps.linked.ui.theme.InkMuted
-import pdalbert.apps.linked.ui.theme.Manrope
+import pdalbert.apps.linked.ui.theme.Inter
 import pdalbert.apps.linked.viewmodel.AllFoldersViewModel
 
 @Composable
@@ -88,7 +88,7 @@ fun AllFoldersScreen(
                     )
                     Text(
                         text = "Carpetas",
-                        fontFamily = Manrope,
+                        fontFamily = Inter,
                         fontWeight = FontWeight.ExtraBold,
                         fontSize = 20.sp,
                         color = Ink,
@@ -107,7 +107,7 @@ fun AllFoldersScreen(
                 ) {
                     Text(
                         text = "+ Nueva",
-                        fontFamily = Manrope,
+                        fontFamily = Inter,
                         fontWeight = FontWeight.Bold,
                         fontSize = 13.sp,
                         color = Color.White
@@ -119,6 +119,7 @@ fun AllFoldersScreen(
             SearchBar(
                 query = searchQuery,
                 onQueryChanged = viewModel::onSearchQueryChanged,
+                onClear = { viewModel.onSearchQueryChanged("") },
                 placeholder = "Buscar carpetas...",
                 modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)
             )
@@ -126,7 +127,7 @@ fun AllFoldersScreen(
             // Count
             Text(
                 text = "${filteredFolders.size} carpeta${if (filteredFolders.size != 1) "s" else ""}",
-                fontFamily = Manrope,
+                fontFamily = Inter,
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 12.sp,
                 color = InkMuted,
@@ -146,7 +147,7 @@ fun AllFoldersScreen(
                         Text(text = "\uD83D\uDCC2", fontSize = 36.sp)
                         Text(
                             text = "Sin carpetas",
-                            fontFamily = Manrope,
+                            fontFamily = Inter,
                             fontWeight = FontWeight.ExtraBold,
                             fontSize = 16.sp,
                             color = Ink,
@@ -154,7 +155,7 @@ fun AllFoldersScreen(
                         )
                         Text(
                             text = "Crea tu primera carpeta\npulsando \"Nueva\" arriba.",
-                            fontFamily = Manrope,
+                            fontFamily = Inter,
                             fontWeight = FontWeight.Normal,
                             fontSize = 13.sp,
                             color = InkMuted,
@@ -200,7 +201,7 @@ fun AllFoldersScreen(
                                             )
                                             Text(
                                                 text = "Editar",
-                                                fontFamily = Manrope,
+                                                fontFamily = Inter,
                                                 fontWeight = FontWeight.Bold,
                                                 fontSize = 10.5.sp,
                                                 color = Color.White
@@ -228,7 +229,7 @@ fun AllFoldersScreen(
                                             )
                                             Text(
                                                 text = "Eliminar",
-                                                fontFamily = Manrope,
+                                                fontFamily = Inter,
                                                 fontWeight = FontWeight.Bold,
                                                 fontSize = 10.5.sp,
                                                 color = Color.White
@@ -241,14 +242,15 @@ fun AllFoldersScreen(
                             FolderCard(
                                 folder = folder,
                                 linkCount = 0,
-                                createdDate = "—",
+                                createdAtText = "",
                                 onClick = {
                                     if (swipedFolderId == folder.id.toString()) {
                                         swipedFolderId = null
                                     } else if (swipedFolderId != null) {
                                         swipedFolderId = null
                                     }
-                                }
+                                },
+                                onMoreOptions = { }
                             )
                         }
                     }

@@ -44,7 +44,7 @@ import pdalbert.apps.linked.R
 import pdalbert.apps.linked.ui.theme.Background
 import pdalbert.apps.linked.ui.theme.DMSerifDisplay
 import pdalbert.apps.linked.ui.theme.DMSerifDisplayItalic
-import pdalbert.apps.linked.ui.theme.Manrope
+import pdalbert.apps.linked.ui.theme.Inter
 import pdalbert.apps.linked.viewmodel.LoginViewModel
 
 private val Surface = Color(0xFFFFFFFF)
@@ -85,7 +85,7 @@ fun LoginScreen(
                     Spacer(modifier = Modifier.width(9.dp))
                     Text(
                         text = "Linked",
-                        fontFamily = Manrope,
+                        fontFamily = Inter,
                         fontWeight = FontWeight.ExtraBold,
                         fontSize = 30.sp,
                         color = TextPrimary,
@@ -178,7 +178,7 @@ fun LoginScreen(
 
                 Text(
                     text = "Guarda, organiza y accede a tus enlaces\nfavoritos desde cualquier lugar.",
-                    fontFamily = Manrope,
+                    fontFamily = Inter,
                     fontWeight = FontWeight.Normal,
                     fontSize = 14.sp,
                     color = Color(0xFF777777),
@@ -215,7 +215,7 @@ fun LoginScreen(
                         Spacer(modifier = Modifier.width(9.dp))
                         Text(
                             text = "Continuar con Google",
-                            fontFamily = Manrope,
+                            fontFamily = Inter,
                             fontWeight = FontWeight.Medium,
                             fontSize = 15.sp,
                             color = TextPrimary,
@@ -238,7 +238,7 @@ fun LoginScreen(
                         }
                         append(" de Linked.")
                     },
-                    fontFamily = Manrope,
+                    fontFamily = Inter,
                     fontWeight = FontWeight.Normal,
                     fontSize = 12.sp,
                     color = Color(0xFFBBBBBB),
@@ -341,7 +341,7 @@ private fun LoginCard(
             Column {
                 Text(
                     text = title,
-                    fontFamily = Manrope,
+                    fontFamily = Inter,
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 13.sp,
                     color = TextPrimary,
@@ -349,7 +349,7 @@ private fun LoginCard(
                 )
                 Text(
                     text = domain,
-                    fontFamily = Manrope,
+                    fontFamily = Inter,
                     fontWeight = FontWeight.Normal,
                     fontSize = 11.sp,
                     color = TextMuted,

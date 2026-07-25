@@ -27,6 +27,7 @@ class SessionManager(private val context: Context) {
         val USER_ID = stringPreferencesKey("user_id")
         val USER_NAME = stringPreferencesKey("user_name")
         val USER_EMAIL = stringPreferencesKey("user_email")
+        val MULTI_TAG_MODE = booleanPreferencesKey("multi_tag_mode")
     }
 
     suspend fun isLoggedIn(): Boolean {
@@ -69,6 +70,17 @@ class SessionManager(private val context: Context) {
     suspend fun clearSession() {
         context.dataStore.edit { preferences ->
             preferences.clear()
+        }
+    }
+
+    suspend fun getMultiTagMode(): Boolean {
+        val prefs = context.dataStore.data.first()
+        return prefs[Keys.MULTI_TAG_MODE] ?: false
+    }
+
+    suspend fun setMultiTagMode(enabled: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[Keys.MULTI_TAG_MODE] = enabled
         }
     }
 }

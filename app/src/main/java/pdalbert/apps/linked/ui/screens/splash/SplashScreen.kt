@@ -50,7 +50,7 @@ import pdalbert.apps.linked.ui.theme.Background
 import pdalbert.apps.linked.ui.theme.Border
 import pdalbert.apps.linked.ui.theme.Ink
 import pdalbert.apps.linked.ui.theme.InkMuted
-import pdalbert.apps.linked.ui.theme.Manrope
+import pdalbert.apps.linked.ui.theme.Inter
 import pdalbert.apps.linked.viewmodel.SplashViewModel
 import pdalbert.apps.linked.ui.theme.Surface
 
@@ -172,7 +172,7 @@ fun SplashScreen(
                     Spacer(modifier = Modifier.width(10.dp))
                     Text(
                         text = "Linked",
-                        fontFamily = Manrope,
+                        fontFamily = Inter,
                         fontWeight = FontWeight.ExtraBold,
                         fontSize = 38.sp,
                         color = Ink,
@@ -285,7 +285,7 @@ private fun AnimatedCard(
             Column {
                 Text(
                     text = card.title,
-                    fontFamily = Manrope,
+                    fontFamily = Inter,
                     fontWeight = FontWeight.Bold,
                     fontSize = 12.sp,
                     color = Ink.copy(alpha = alpha),
@@ -293,7 +293,7 @@ private fun AnimatedCard(
                 )
                 Text(
                     text = card.url,
-                    fontFamily = Manrope,
+                    fontFamily = Inter,
                     fontWeight = FontWeight.Normal,
                     fontSize = 10.sp,
                     color = InkMuted.copy(alpha = alpha)

@@ -19,11 +19,13 @@ import pdalbert.apps.linked.ui.screens.home.AllLinksScreen
 import pdalbert.apps.linked.ui.screens.home.HomeScreen
 import pdalbert.apps.linked.ui.screens.login.LoginScreen
 import pdalbert.apps.linked.ui.screens.splash.SplashScreen
+import pdalbert.apps.linked.ui.screens.tags.TagsManagementScreen
 import pdalbert.apps.linked.viewmodel.AllFoldersViewModel
 import pdalbert.apps.linked.viewmodel.AllLinksViewModel
 import pdalbert.apps.linked.viewmodel.HomeViewModel
 import pdalbert.apps.linked.viewmodel.LoginViewModel
 import pdalbert.apps.linked.viewmodel.SplashViewModel
+import pdalbert.apps.linked.viewmodel.TagsViewModel
 
 @Composable
 fun NavGraph(
@@ -71,6 +73,11 @@ fun NavGraph(
         composable(Screen.AllFolders.route) {
             val allFoldersViewModel: AllFoldersViewModel = hiltViewModel()
             AllFoldersScreen(navController = navController, viewModel = allFoldersViewModel)
+        }
+
+        composable(Screen.Tags.route) {
+            val tagsViewModel: TagsViewModel = hiltViewModel()
+            TagsManagementScreen(navController = navController, viewModel = tagsViewModel)
         }
 
         composable(

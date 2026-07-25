@@ -31,7 +31,7 @@ import pdalbert.apps.linked.ui.theme.Danger
 import pdalbert.apps.linked.ui.theme.DangerBg
 import pdalbert.apps.linked.ui.theme.Ink
 import pdalbert.apps.linked.ui.theme.InkMuted
-import pdalbert.apps.linked.ui.theme.Manrope
+import pdalbert.apps.linked.ui.theme.Inter
 import pdalbert.apps.linked.ui.theme.Surface
 
 @Composable
@@ -69,7 +69,7 @@ fun DeleteConfirmDialog(
 
             Text(
                 text = title,
-                fontFamily = Manrope,
+                fontFamily = Inter,
                 fontWeight = FontWeight.ExtraBold,
                 fontSize = 16.sp,
                 color = Ink,
@@ -81,7 +81,7 @@ fun DeleteConfirmDialog(
 
             Text(
                 text = message,
-                fontFamily = Manrope,
+                fontFamily = Inter,
                 fontWeight = FontWeight.Normal,
                 fontSize = 12.5.sp,
                 color = InkMuted,
@@ -106,7 +106,7 @@ fun DeleteConfirmDialog(
                 ) {
                     Text(
                         text = "Cancelar",
-                        fontFamily = Manrope,
+                        fontFamily = Inter,
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 13.5.sp,
                         color = InkMuted
@@ -124,7 +124,7 @@ fun DeleteConfirmDialog(
                 ) {
                     Text(
                         text = "Eliminar",
-                        fontFamily = Manrope,
+                        fontFamily = Inter,
                         fontWeight = FontWeight.Bold,
                         fontSize = 13.5.sp,
                         color = Surface

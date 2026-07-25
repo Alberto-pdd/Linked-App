@@ -7,15 +7,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -28,87 +24,94 @@ import androidx.compose.ui.unit.sp
 import pdalbert.apps.linked.data.model.Folder
 import pdalbert.apps.linked.ui.theme.Border
 import pdalbert.apps.linked.ui.theme.Ink
+import pdalbert.apps.linked.ui.theme.InkDecorations
 import pdalbert.apps.linked.ui.theme.InkMuted
-import pdalbert.apps.linked.ui.theme.Manrope
+import pdalbert.apps.linked.ui.theme.Inter
 import pdalbert.apps.linked.ui.theme.Surface
 
 @Composable
 fun FolderCard(
     folder: Folder,
     linkCount: Int,
-    createdDate: String,
+    createdAtText: String = "",
     onClick: () -> Unit,
+    onMoreOptions: (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
-    val bgColorParsed = try { Color(android.graphics.Color.parseColor(folder.bgColor)) }
-    catch (_: Exception) { Color(0xFFFEF3C7) }
+    val bgColorParsed = try {
+        Color(android.graphics.Color.parseColor(folder.bgColor))
+    } catch (_: Exception) {
+        Color(0xFFFEF3C7)
+    }
 
     Row(
         modifier = modifier
+            .background(Color.Transparent)
             .fillMaxWidth()
-            .clip(RoundedCornerShape(20.dp))
+            .clip(RoundedCornerShape(14.dp))
             .background(Surface)
-            .border(1.5.dp, Border, RoundedCornerShape(20.dp))
+            .border(1.5.dp, Border, RoundedCornerShape(14.dp))
             .clickable { onClick() }
-            .padding(15.dp, 16.dp),
+            .padding(14.dp, 16.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(13.dp)
+        horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
+        // Emoji box
         Box(
             modifier = Modifier
-                .size(48.dp)
-                .clip(RoundedCornerShape(13.dp))
+                .size(42.dp)
+                .clip(RoundedCornerShape(10.dp))
                 .background(bgColorParsed),
             contentAlignment = Alignment.Center
         ) {
-            Text(text = folder.emoji, fontSize = 24.sp)
+            Text(text = folder.emoji, fontSize = 20.sp)
         }
 
+        // Body: name + meta
         Column(modifier = Modifier.weight(1f)) {
             Text(
                 text = folder.name,
-                fontFamily = Manrope,
+                fontFamily = Inter,
                 fontWeight = FontWeight.Bold,
                 fontSize = 15.sp,
                 color = Ink,
-                letterSpacing = (-0.3).sp
+                letterSpacing = (-0.3).sp,
+                lineHeight = 21.sp
             )
+            val metaText = buildString {
+                append("$linkCount enlaces")
+                if (createdAtText.isNotEmpty()) {
+                    append(" · Creada $createdAtText")
+                }
+            }
             Text(
-                text = "Creada el $createdDate",
-                fontFamily = Manrope,
+                text = metaText,
+                fontFamily = Inter,
                 fontWeight = FontWeight.Normal,
                 fontSize = 12.sp,
                 color = InkMuted,
-                modifier = Modifier.padding(top = 3.dp)
+                lineHeight = 16.sp,
+                modifier = Modifier.padding(top = 2.dp)
             )
         }
 
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(4.dp)
-        ) {
+        // More button (⋯)
+        if (onMoreOptions != null) {
             Box(
                 modifier = Modifier
-                    .clip(RoundedCornerShape(100.dp))
-                    .background(pdalbert.apps.linked.ui.theme.Background)
-                    .border(1.5.dp, Border, RoundedCornerShape(100.dp))
-                    .padding(horizontal = 10.dp, vertical = 4.dp)
+                    .size(32.dp)
+                    .clip(CircleShape)
+                    .clickable { onMoreOptions() },
+                contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "$linkCount",
-                    fontFamily = Manrope,
+                    text = "⋯",
+                    fontFamily = Inter,
                     fontWeight = FontWeight.Bold,
-                    fontSize = 12.sp,
-                    color = InkMuted
+                    fontSize = 16.sp,
+                    color = InkDecorations
                 )
             }
-
-            Icon(
-                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                contentDescription = null,
-                tint = Color(0xFFC8C6C0),
-                modifier = Modifier.size(16.dp)
-            )
         }
     }
 }
