@@ -3,17 +3,12 @@ package pdalbert.apps.linked.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Clock
-import kotlinx.datetime.DateTimeUnit
-import kotlinx.datetime.minus
 import pdalbert.apps.linked.data.local.SessionManager
 import pdalbert.apps.linked.data.model.Folder
 import pdalbert.apps.linked.data.model.Link
@@ -21,16 +16,19 @@ import pdalbert.apps.linked.data.model.Tag
 import pdalbert.apps.linked.data.repository.FolderRepository
 import pdalbert.apps.linked.data.repository.LinkRepository
 import pdalbert.apps.linked.data.repository.TagRepository
+import pdalbert.apps.linked.domain.usecase.FilterFoldersUseCase
+import pdalbert.apps.linked.domain.usecase.FilterLinksUseCase
 import java.util.UUID
 import javax.inject.Inject
 
-@OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val sessionManager: SessionManager,
     private val linkRepository: LinkRepository,
     private val folderRepository: FolderRepository,
-    private val tagRepository: TagRepository
+    private val tagRepository: TagRepository,
+    private val filterLinksUseCase: FilterLinksUseCase,
+    private val filterFoldersUseCase: FilterFoldersUseCase
 ) : ViewModel() {
 
     val links: StateFlow<List<Link>> = linkRepository.getAll()
@@ -60,56 +58,19 @@ class HomeViewModel @Inject constructor(
     private val _linkTimePeriod = MutableStateFlow("Esta semana")
     val linkTimePeriod: StateFlow<String> = _linkTimePeriod
 
-    private val _folderSortOption = MutableStateFlow("Más nuevo")
+    private val _folderSortOption = MutableStateFlow("Más enlaces")
     val folderSortOption: StateFlow<String> = _folderSortOption
 
-    val filteredLinks: StateFlow<List<Link>> = _activeTags.flatMapLatest { activeTags ->
-        if (activeTags.isEmpty()) {
-            linkRepository.getAll()
-        } else {
-            linkRepository.getByTagNames(activeTags)
-        }
-    }.combine(_searchQuery) { links, query ->
-        links.filter { link ->
-            query.isBlank() ||
-                link.title.contains(query, ignoreCase = true) ||
-                link.url.contains(query, ignoreCase = true) ||
-                link.description.contains(query, ignoreCase = true)
-        }
-    }.combine(_linkTimePeriod) { links, period ->
-        val now = Clock.System.now()
-        when (period) {
-            "Hoy" -> links.filter {
-                it.createdAt >= now.minus(24 * 3600 * 1000L, DateTimeUnit.MILLISECOND)
-            }
-            "Esta semana" -> links.filter {
-                it.createdAt >= now.minus(7 * 24 * 3600 * 1000L, DateTimeUnit.MILLISECOND)
-            }
-            "Este mes" -> links.filter {
-                it.createdAt >= now.minus(30 * 24 * 3600 * 1000L, DateTimeUnit.MILLISECOND)
-            }
-            else -> links
-        }
-    }.combine(_linkSortAscending) { links, ascending ->
-        if (ascending) links.sortedBy { it.createdAt } else links.sortedByDescending { it.createdAt }
+    val filteredLinks: StateFlow<List<Link>> = combine(
+        links, _searchQuery, _activeTags, _linkTimePeriod, _linkSortAscending
+    ) { links, query, activeTags, timePeriod, sortAscending ->
+        filterLinksUseCase.filter(links, query, activeTags, timePeriod, sortAscending)
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     val filteredFolders: StateFlow<List<Folder>> = combine(
-        folders, _searchQuery, _activeTags, _folderSortOption
-    ) { allFolders, query, activeTags, sortOption ->
-        val filtered = allFolders.filter { folder ->
-            val matchesSearch = query.isBlank() || folder.name.contains(query, ignoreCase = true)
-            val matchesTag = activeTags.isEmpty() || activeTags.any { tag -> 
-                folder.name.contains(tag, ignoreCase = true) 
-            }
-            matchesSearch && matchesTag
-        }
-        when (sortOption) {
-            "Más antiguo" -> filtered.sortedBy { it.createdAt }
-            "Más enlaces" -> filtered.sortedByDescending { it.name }
-            "Menos enlaces" -> filtered.sortedBy { it.name }
-            else -> filtered.sortedByDescending { it.createdAt }
-        }
+        folders, _searchQuery, _folderSortOption
+    ) { allFolders, query, sortOption ->
+        filterFoldersUseCase.filter(allFolders, query, sortOption)
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     private val _navigationEvent = MutableStateFlow<String?>(null)

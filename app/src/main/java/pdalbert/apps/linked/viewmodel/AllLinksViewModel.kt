@@ -13,6 +13,7 @@ import pdalbert.apps.linked.data.model.Link
 import pdalbert.apps.linked.data.model.Tag
 import pdalbert.apps.linked.data.repository.LinkRepository
 import pdalbert.apps.linked.data.repository.TagRepository
+import pdalbert.apps.linked.domain.usecase.FilterLinksUseCase
 import kotlinx.datetime.Instant
 import java.util.UUID
 import javax.inject.Inject
@@ -20,7 +21,8 @@ import javax.inject.Inject
 @HiltViewModel
 class AllLinksViewModel @Inject constructor(
     private val linkRepository: LinkRepository,
-    private val tagRepository: TagRepository
+    private val tagRepository: TagRepository,
+    private val filterLinksUseCase: FilterLinksUseCase
 ) : ViewModel() {
 
     val links: StateFlow<List<Link>> = linkRepository.getAll()
@@ -35,17 +37,16 @@ class AllLinksViewModel @Inject constructor(
     private val _activeTags = MutableStateFlow<List<String>>(emptyList())
     val activeTags: StateFlow<List<String>> = _activeTags
 
-    val filteredLinks: StateFlow<List<Link>> = combine(links, _searchQuery, _activeTags) { allLinks, query, activeTags ->
-        allLinks.filter { link ->
-            val matchesTag = activeTags.isEmpty() || activeTags.any { tag -> 
-                link.title.contains(tag, ignoreCase = true) 
-            }
-            val matchesQuery = query.isBlank() ||
-                link.title.contains(query, ignoreCase = true) ||
-                link.url.contains(query, ignoreCase = true) ||
-                link.description.contains(query, ignoreCase = true)
-            matchesTag && matchesQuery
-        }
+    private val _linkTimePeriod = MutableStateFlow("Todos")
+    val linkTimePeriod: StateFlow<String> = _linkTimePeriod
+
+    private val _linkSortAscending = MutableStateFlow(false)
+    val linkSortAscending: StateFlow<Boolean> = _linkSortAscending
+
+    val filteredLinks: StateFlow<List<Link>> = combine(
+        links, _searchQuery, _activeTags, _linkTimePeriod, _linkSortAscending
+    ) { allLinks, query, activeTags, timePeriod, sortAscending ->
+        filterLinksUseCase.filter(allLinks, query, activeTags, timePeriod, sortAscending)
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     private val _showAddSheet = MutableStateFlow(false)
@@ -72,6 +73,14 @@ class AllLinksViewModel @Inject constructor(
             current.add(tag)
         }
         _activeTags.value = current
+    }
+
+    fun onLinkTimePeriodChanged(period: String) {
+        _linkTimePeriod.value = period
+    }
+
+    fun onLinkSortDirectionChanged() {
+        _linkSortAscending.value = !_linkSortAscending.value
     }
 
     fun onAddClicked() {
