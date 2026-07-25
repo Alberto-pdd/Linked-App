@@ -11,6 +11,9 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
+import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.minus
 import pdalbert.apps.linked.data.local.SessionManager
 import pdalbert.apps.linked.data.model.Folder
 import pdalbert.apps.linked.data.model.Link
@@ -72,6 +75,20 @@ class HomeViewModel @Inject constructor(
                 link.title.contains(query, ignoreCase = true) ||
                 link.url.contains(query, ignoreCase = true) ||
                 link.description.contains(query, ignoreCase = true)
+        }
+    }.combine(_linkTimePeriod) { links, period ->
+        val now = Clock.System.now()
+        when (period) {
+            "Hoy" -> links.filter {
+                it.createdAt >= now.minus(24 * 3600 * 1000L, DateTimeUnit.MILLISECOND)
+            }
+            "Esta semana" -> links.filter {
+                it.createdAt >= now.minus(7 * 24 * 3600 * 1000L, DateTimeUnit.MILLISECOND)
+            }
+            "Este mes" -> links.filter {
+                it.createdAt >= now.minus(30 * 24 * 3600 * 1000L, DateTimeUnit.MILLISECOND)
+            }
+            else -> links
         }
     }.combine(_linkSortAscending) { links, ascending ->
         if (ascending) links.sortedBy { it.createdAt } else links.sortedByDescending { it.createdAt }
