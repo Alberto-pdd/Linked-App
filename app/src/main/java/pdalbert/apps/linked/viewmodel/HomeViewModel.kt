@@ -223,6 +223,18 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    fun onToggleFavoriteLink(linkId: UUID) {
+        viewModelScope.launch {
+            linkRepository.toggleFavorite(linkId)
+        }
+    }
+
+    fun onToggleFavoriteFolder(folderId: UUID) {
+        viewModelScope.launch {
+            folderRepository.toggleFavorite(folderId)
+        }
+    }
+
     fun onLinkSaved(link: Link) {
         viewModelScope.launch {
             if (_editingLink.value != null) {

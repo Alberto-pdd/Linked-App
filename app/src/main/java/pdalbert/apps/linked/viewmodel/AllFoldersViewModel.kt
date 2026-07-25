@@ -87,6 +87,12 @@ class AllFoldersViewModel @Inject constructor(
         _deleteFolderId.value = null
     }
 
+    fun onToggleFavorite(folderId: UUID) {
+        viewModelScope.launch {
+            folderRepository.toggleFavorite(folderId)
+        }
+    }
+
     fun onSheetDismissed() {
         _showAddSheet.value = false
         _editingFolder.value = null

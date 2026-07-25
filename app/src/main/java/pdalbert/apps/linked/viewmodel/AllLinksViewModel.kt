@@ -115,6 +115,12 @@ class AllLinksViewModel @Inject constructor(
         _deleteLinkId.value = null
     }
 
+    fun onToggleFavorite(linkId: UUID) {
+        viewModelScope.launch {
+            linkRepository.toggleFavorite(linkId)
+        }
+    }
+
     fun onSheetDismissed() {
         _showAddSheet.value = false
         _editingLink.value = null
