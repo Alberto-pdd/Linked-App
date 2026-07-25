@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import pdalbert.apps.linked.ui.theme.Accent
 import pdalbert.apps.linked.ui.theme.Ink
-import pdalbert.apps.linked.ui.theme.Manrope
+import pdalbert.apps.linked.ui.theme.Inter
 
 @Composable
 fun TopNav(
@@ -43,7 +43,7 @@ fun TopNav(
     ) {
         Text(
             text = title,
-            fontFamily = Manrope,
+            fontFamily = Inter,
             fontWeight = FontWeight.ExtraBold,
             fontSize = 20.sp,
             color = Ink,
@@ -75,7 +75,7 @@ fun TopNav(
                 )
                 Text(
                     text = actionText,
-                    fontFamily = Manrope,
+                    fontFamily = Inter,
                     fontWeight = FontWeight.Bold,
                     fontSize = 13.sp,
                     color = Color.White

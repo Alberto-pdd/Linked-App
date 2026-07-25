@@ -10,8 +10,10 @@ import dagger.hilt.components.SingletonComponent
 import pdalbert.apps.linked.data.local.SessionManager
 import pdalbert.apps.linked.data.repository.FakeFolderRepository
 import pdalbert.apps.linked.data.repository.FakeLinkRepository
+import pdalbert.apps.linked.data.repository.FakeTagRepository
 import pdalbert.apps.linked.data.repository.FolderRepository
 import pdalbert.apps.linked.data.repository.LinkRepository
+import pdalbert.apps.linked.data.repository.TagRepository
 import javax.inject.Singleton
 
 @Module
@@ -25,6 +27,10 @@ abstract class BindModule {
     @Binds
     @Singleton
     abstract fun bindFolderRepository(impl: FakeFolderRepository): FolderRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindTagRepository(impl: FakeTagRepository): TagRepository
 }
 
 @Module

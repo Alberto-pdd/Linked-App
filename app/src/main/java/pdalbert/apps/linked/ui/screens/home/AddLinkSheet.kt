@@ -27,6 +27,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.datetime.Clock
 import pdalbert.apps.linked.data.model.Link
 import pdalbert.apps.linked.ui.components.ColorPicker
 import pdalbert.apps.linked.ui.components.EmojiPicker
@@ -36,7 +37,7 @@ import pdalbert.apps.linked.ui.theme.Background
 import pdalbert.apps.linked.ui.theme.Border
 import pdalbert.apps.linked.ui.theme.Ink
 import pdalbert.apps.linked.ui.theme.InkMuted
-import pdalbert.apps.linked.ui.theme.Manrope
+import pdalbert.apps.linked.ui.theme.Inter
 import pdalbert.apps.linked.ui.theme.Surface
 import java.util.UUID
 
@@ -61,7 +62,6 @@ fun AddLinkSheet(
     var selectedColor by remember { mutableStateOf(editingLink?.bgColor ?: "#EBF3FB") }
     var url by remember { mutableStateOf(editingLink?.url ?: "") }
     var title by remember { mutableStateOf(editingLink?.title ?: "") }
-    var tag by remember { mutableStateOf(editingLink?.tag ?: "") }
 
     var urlError by remember { mutableStateOf(false) }
 
@@ -88,7 +88,7 @@ fun AddLinkSheet(
         ) {
             Text(
                 text = if (editingLink != null) "Editar enlace" else "Nuevo enlace",
-                fontFamily = Manrope,
+                fontFamily = Inter,
                 fontWeight = FontWeight.ExtraBold,
                 fontSize = 18.sp,
                 color = Ink,
@@ -98,7 +98,7 @@ fun AddLinkSheet(
 
             Text(
                 text = "ICONO",
-                fontFamily = Manrope,
+                fontFamily = Inter,
                 fontWeight = FontWeight.Bold,
                 fontSize = 11.sp,
                 color = InkMuted,
@@ -115,7 +115,7 @@ fun AddLinkSheet(
 
             Text(
                 text = "COLOR",
-                fontFamily = Manrope,
+                fontFamily = Inter,
                 fontWeight = FontWeight.Bold,
                 fontSize = 11.sp,
                 color = InkMuted,
@@ -131,7 +131,7 @@ fun AddLinkSheet(
 
             Text(
                 text = "URL",
-                fontFamily = Manrope,
+                fontFamily = Inter,
                 fontWeight = FontWeight.Bold,
                 fontSize = 11.sp,
                 color = InkMuted,
@@ -150,7 +150,7 @@ fun AddLinkSheet(
 
             Text(
                 text = "TÍTULO",
-                fontFamily = Manrope,
+                fontFamily = Inter,
                 fontWeight = FontWeight.Bold,
                 fontSize = 11.sp,
                 color = InkMuted,
@@ -161,21 +161,6 @@ fun AddLinkSheet(
                 value = title,
                 onValueChange = { title = it },
                 placeholder = "Nombre del enlace"
-            )
-
-            Text(
-                text = "ETIQUETA",
-                fontFamily = Manrope,
-                fontWeight = FontWeight.Bold,
-                fontSize = 11.sp,
-                color = InkMuted,
-                letterSpacing = 0.4.sp,
-                modifier = Modifier.padding(bottom = 7.dp)
-            )
-            FieldInput(
-                value = tag,
-                onValueChange = { tag = it },
-                placeholder = "Diseño, IA, Dev…"
             )
 
             Spacer(modifier = Modifier.height(4.dp))
@@ -195,7 +180,7 @@ fun AddLinkSheet(
                 ) {
                     Text(
                         text = "Cancelar",
-                        fontFamily = Manrope,
+                        fontFamily = Inter,
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 14.sp,
                         color = InkMuted
@@ -212,15 +197,15 @@ fun AddLinkSheet(
                             if (url.isBlank()) {
                                 urlError = true
                             } else {
+                                val now = Clock.System.now()
                                 val link = Link(
                                     id = editingLink?.id ?: UUID.randomUUID(),
                                     title = title.ifBlank { url },
                                     url = url,
                                     emoji = selectedEmoji,
                                     bgColor = selectedColor,
-                                    tag = tag,
-                                    createdAt = editingLink?.createdAt ?: "Ahora mismo",
-                                    modifiedAt = "Ahora mismo"
+                                    createdAt = editingLink?.createdAt ?: now,
+                                    modifiedAt = now
                                 )
                                 onSave(link)
                             }
@@ -229,7 +214,7 @@ fun AddLinkSheet(
                 ) {
                     Text(
                         text = if (editingLink != null) "Guardar cambios" else "Guardar",
-                        fontFamily = Manrope,
+                        fontFamily = Inter,
                         fontWeight = FontWeight.Bold,
                         fontSize = 14.sp,
                         color = Surface

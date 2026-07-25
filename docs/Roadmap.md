@@ -222,6 +222,9 @@ Crear la pantalla de configuración de la aplicación.
 **Componentes de la pantalla:**
 - Profile card: avatar gradient + nombre + email + badge "Google"
 - Sección Cuenta: Perfil
+- Sección Filtros: Selección múltiple de tags (Switch, default OFF)
+  - OFF = selección única (un tag a la vez)
+  - ON = selección múltiple (varios tags)
 - Sección Apariencia: Tema, Idioma
 - Sección Privacidad y datos: Exportar datos, Importar enlaces
 - Sección Soporte: Valorar, Centro de ayuda, Reportar, Política de privacidad

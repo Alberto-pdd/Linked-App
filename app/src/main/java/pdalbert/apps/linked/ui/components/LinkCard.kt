@@ -154,7 +154,7 @@ fun LinkCard(
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                text = "$remainingCount",
+                                text = "+$remainingCount",
                                 fontFamily = Inter,
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 8.sp,

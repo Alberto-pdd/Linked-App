@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 import pdalbert.apps.linked.ui.theme.Ink
-import pdalbert.apps.linked.ui.theme.Manrope
+import pdalbert.apps.linked.ui.theme.Inter
 import pdalbert.apps.linked.ui.theme.Surface
 
 @Composable
@@ -66,7 +66,7 @@ fun Toast(
             ) {
                 Text(
                     text = message ?: "",
-                    fontFamily = Manrope,
+                    fontFamily = Inter,
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 13.sp,
                     color = Surface

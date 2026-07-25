@@ -22,12 +22,22 @@ data class ColorOption(
 )
 
 val defaultColorOptions = listOf(
-    ColorOption("#FEF3C7", Color(0xFFFEF3C7)),
-    ColorOption("#DCFCE7", Color(0xFFDCFCE7)),
-    ColorOption("#EBF3FB", Color(0xFFEBF3FB)),
-    ColorOption("#EDE9FE", Color(0xFFEDE9FE)),
-    ColorOption("#FFE4E6", Color(0xFFD4E6FF)),
-    ColorOption("#F0FDF4", Color(0xFFF0FDF4))
+    ColorOption("#FFCDD2", Color(0xFFFFCDD2)),
+    ColorOption("#F8BBD0", Color(0xFFF8BBD0)),
+    ColorOption("#E1BEE7", Color(0xFFE1BEE7)),
+    ColorOption("#D1C4E9", Color(0xFFD1C4E9)),
+    ColorOption("#C5CAE9", Color(0xFFC5CAE9)),
+    ColorOption("#BBDEFB", Color(0xFFBBDEFB)),
+    ColorOption("#B3E5FC", Color(0xFFB3E5FC)),
+    ColorOption("#B2EBF2", Color(0xFFB2EBF2)),
+    ColorOption("#B2DFDB", Color(0xFFB2DFDB)),
+    ColorOption("#C8E6C9", Color(0xFFC8E6C9)),
+    ColorOption("#DCEDC8", Color(0xFFDCEDC8)),
+    ColorOption("#FFF9C4", Color(0xFFFFFF9C4)),
+    ColorOption("#FFE0B2", Color(0xFFFFE0B2)),
+    ColorOption("#FFCCBC", Color(0xFFFFCCBC)),
+    ColorOption("#D7CCC8", Color(0xFFD7CCC8)),
+    ColorOption("#CFD8DC", Color(0xFFCFD8DC))
 )
 
 @Composable

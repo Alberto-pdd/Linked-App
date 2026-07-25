@@ -39,7 +39,7 @@ import pdalbert.apps.linked.ui.theme.Background
 import pdalbert.apps.linked.ui.theme.Border
 import pdalbert.apps.linked.ui.theme.Ink
 import pdalbert.apps.linked.ui.theme.InkMuted
-import pdalbert.apps.linked.ui.theme.Manrope
+import pdalbert.apps.linked.ui.theme.Inter
 import pdalbert.apps.linked.ui.theme.Surface
 import java.util.UUID
 
@@ -87,7 +87,7 @@ fun AddFolderSheet(
         ) {
             Text(
                 text = if (editingFolder != null) "Editar carpeta" else "Nueva carpeta",
-                fontFamily = Manrope,
+                fontFamily = Inter,
                 fontWeight = FontWeight.ExtraBold,
                 fontSize = 18.sp,
                 color = Ink,
@@ -97,7 +97,7 @@ fun AddFolderSheet(
 
             Text(
                 text = "ICONO",
-                fontFamily = Manrope,
+                fontFamily = Inter,
                 fontWeight = FontWeight.Bold,
                 fontSize = 11.sp,
                 color = InkMuted,
@@ -114,7 +114,7 @@ fun AddFolderSheet(
 
             Text(
                 text = "COLOR",
-                fontFamily = Manrope,
+                fontFamily = Inter,
                 fontWeight = FontWeight.Bold,
                 fontSize = 11.sp,
                 color = InkMuted,
@@ -130,7 +130,7 @@ fun AddFolderSheet(
 
             Text(
                 text = "NOMBRE",
-                fontFamily = Manrope,
+                fontFamily = Inter,
                 fontWeight = FontWeight.Bold,
                 fontSize = 11.sp,
                 color = InkMuted,
@@ -164,7 +164,7 @@ fun AddFolderSheet(
                 ) {
                     Text(
                         text = "Cancelar",
-                        fontFamily = Manrope,
+                        fontFamily = Inter,
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 14.sp,
                         color = InkMuted
@@ -194,7 +194,7 @@ fun AddFolderSheet(
                 ) {
                     Text(
                         text = if (editingFolder != null) "Guardar cambios" else "Guardar",
-                        fontFamily = Manrope,
+                        fontFamily = Inter,
                         fontWeight = FontWeight.Bold,
                         fontSize = 14.sp,
                         color = Surface
@@ -206,7 +206,7 @@ fun AddFolderSheet(
 }
 
 @Composable
-internal fun FieldInput(
+fun FieldInput(
     value: String,
     onValueChange: (String) -> Unit,
     placeholder: String,
@@ -230,7 +230,7 @@ internal fun FieldInput(
         if (value.isEmpty()) {
             Text(
                 text = placeholder,
-                fontFamily = Manrope,
+                fontFamily = Inter,
                 fontWeight = FontWeight.Normal,
                 fontSize = 14.sp,
                 color = InkMuted
@@ -240,7 +240,7 @@ internal fun FieldInput(
             value = value,
             onValueChange = onValueChange,
             textStyle = TextStyle(
-                fontFamily = Manrope,
+                fontFamily = Inter,
                 fontWeight = FontWeight.Medium,
                 fontSize = 14.sp,
                 color = Ink

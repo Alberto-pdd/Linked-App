@@ -9,6 +9,7 @@ sealed class Screen(val route: String) {
     object Settings : Screen("settings")
     object AllLinks : Screen("all_links")
     object AllFolders : Screen("all_folders")
+    object Tags : Screen("tags")
     object LinkDetail : Screen("link_detail/{linkId}") {
         fun createRoute(linkId: UUID) = "link_detail/$linkId"
     }

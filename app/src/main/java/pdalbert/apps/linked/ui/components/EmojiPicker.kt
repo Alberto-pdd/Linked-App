@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import pdalbert.apps.linked.ui.theme.Background
 import pdalbert.apps.linked.ui.theme.Ink
-import pdalbert.apps.linked.ui.theme.Manrope
+import pdalbert.apps.linked.ui.theme.Inter
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
