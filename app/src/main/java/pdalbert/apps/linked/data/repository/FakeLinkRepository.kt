@@ -177,6 +177,11 @@ class FakeLinkRepository @Inject constructor() : LinkRepository {
             addTagToLink(links[11].id, tags[3].id) // Vimeo → Video
             addTagToLink(links[12].id, tags[0].id) // Behance → Diseño
             addTagToLink(links[13].id, tags[1].id) // Hugging Face → IA
+
+            // Additional tags for testing "+N" indicator
+            addTagToLink(links[0].id, tags[1].id) // Figma → additionally IA
+            addTagToLink(links[1].id, tags[0].id) // Claude → additionally Diseño
+            addTagToLink(links[4].id, tags[1].id) // GitHub → additionally IA
         }
     }
 
