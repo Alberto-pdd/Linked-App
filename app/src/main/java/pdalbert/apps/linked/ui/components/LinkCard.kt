@@ -15,6 +15,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.Star
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -41,6 +45,7 @@ fun LinkCard(
     link: Link,
     tags: List<Tag> = emptyList(),
     timeAgo: String = "",
+    isFavorite: Boolean = false,
     onClick: () -> Unit,
     onMoreOptions: (() -> Unit)? = null,
     modifier: Modifier = Modifier
@@ -96,15 +101,34 @@ fun LinkCard(
                 if (domain.isNotEmpty() && timeAgo.isNotEmpty()) append(" · ")
                 if (timeAgo.isNotEmpty()) append(timeAgo)
             }
-            if (subtitle.isNotEmpty()) {
-                Text(
-                    text = subtitle,
-                    fontFamily = Inter,
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 11.sp,
-                    color = InkDecorations,
-                    modifier = Modifier.padding(top = 4.dp)
-                )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(top = 4.dp)
+            ) {
+                if (subtitle.isNotEmpty()) {
+                    Text(
+                        text = subtitle,
+                        fontFamily = Inter,
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 11.sp,
+                        color = InkDecorations
+                    )
+                }
+                if (isFavorite) {
+                    Text(
+                        text = " · ",
+                        fontFamily = Inter,
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 11.sp,
+                        color = InkDecorations
+                    )
+                    Icon(
+                        imageVector = Icons.Filled.Star,
+                        contentDescription = "Favorito",
+                        tint = Color(0xFFF5A623),
+                        modifier = Modifier.size(12.dp)
+                    )
+                }
             }
         }
 
