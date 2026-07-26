@@ -19,13 +19,16 @@ import pdalbert.apps.linked.ui.screens.home.AllLinksScreen
 import pdalbert.apps.linked.ui.screens.home.HomeScreen
 import pdalbert.apps.linked.ui.screens.login.LoginScreen
 import pdalbert.apps.linked.ui.screens.splash.SplashScreen
-import pdalbert.apps.linked.ui.screens.tags.TagsManagementScreen
 import pdalbert.apps.linked.viewmodel.AllFoldersViewModel
+import pdalbert.apps.linked.viewmodel.AllFoldersViewModelFactory
 import pdalbert.apps.linked.viewmodel.AllLinksViewModel
+import pdalbert.apps.linked.viewmodel.AllLinksViewModelFactory
 import pdalbert.apps.linked.viewmodel.HomeViewModel
+import pdalbert.apps.linked.viewmodel.HomeViewModelFactory
 import pdalbert.apps.linked.viewmodel.LoginViewModel
+import pdalbert.apps.linked.viewmodel.LoginViewModelFactory
 import pdalbert.apps.linked.viewmodel.SplashViewModel
-import pdalbert.apps.linked.viewmodel.TagsViewModel
+import pdalbert.apps.linked.viewmodel.SplashViewModelFactory
 
 @Composable
 fun NavGraph(

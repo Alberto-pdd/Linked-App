@@ -14,6 +14,7 @@
     --muted: #6B6B66;
     --deco: #7A7A74;
     --accent: #3B82C4;
+    --accent2: #2563EB;
     --accent-bg: #EBF3FB;
     --border: #E2E1DC;
     --border-light: #EFEEEA;
@@ -95,24 +96,14 @@
   .header-left {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
     cursor: pointer;
   }
-  .header-back {
-    width: 36px; height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 10px;
-    background: var(--surface);
-    border: 1.5px solid var(--border);
-    flex-shrink: 0;
-    transition: all 0.15s;
-  }
-  .header-left:hover .header-back { border-color: var(--accent); }
-  .header-back svg {
+  .header-left svg {
     color: var(--fg);
+    transition: opacity 0.15s;
   }
+  .header-left:hover svg { opacity: 0.7; }
   .header-title {
     font-size: 22px;
     font-weight: 700;
@@ -220,7 +211,6 @@
     border-radius: 99px;
     padding: 2px 10px;
     line-height: 18px;
-    letter-spacing: 0.01em;
     cursor: pointer;
     font-family: inherit;
     display: inline-flex;
@@ -237,7 +227,6 @@
     color: var(--deco);
     font-size: 11px;
     font-weight: 600;
-    letter-spacing: 0.01em;
     display: inline-flex;
     align-items: center;
     gap: 4px;
@@ -253,7 +242,6 @@
     font-size: 12px;
     font-weight: 600;
     color: var(--muted);
-    letter-spacing: 0.01em;
   }
 
   .filter-dropdown-menu {
@@ -339,7 +327,6 @@
     font-size: 11px;
     color: var(--deco);
     line-height: 1.3;
-    letter-spacing: 0.01em;
   }
   .link-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
   .link-tag {
@@ -347,7 +334,6 @@
     padding: 3px 10px;
     font-size: 11px;
     font-weight: 600;
-    letter-spacing: 0.01em;
     line-height: 1.3;
     white-space: nowrap;
   }
@@ -402,6 +388,7 @@
   .context-menu-item.danger { color: var(--danger); }
   .context-menu-item svg { flex-shrink: 0; }
 
+  /* ============ EMPTY STATE ============ */
   /* ============ TAG COLORS ============ */
   .link-tag.tag-diseno { background: var(--yellow-bg); color: #92630A; }
   .link-tag.tag-ia { background: var(--green-bg); color: var(--success); }
@@ -416,7 +403,6 @@
     gap: 3px;
     font-size: 10px;
     font-weight: 600;
-    letter-spacing: 0.01em;
     color: var(--deco);
     background: var(--border-light);
     border-radius: 99px;
@@ -523,11 +509,9 @@
       <!-- Header -->
       <div class="header" data-od-id="all-links-header">
         <div class="header-left" data-od-id="back-button">
-          <div class="header-back">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M15 18l-6-6 6-6"/>
-            </svg>
-          </div>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          </svg>
           <span class="header-title">Todos los links</span>
         </div>
       </div>
@@ -538,7 +522,7 @@
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#888880" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
           </svg>
-          <input type="search" placeholder="Buscar en tus links…" data-od-id="search-input">
+          <input type="search" placeholder="Buscar enlaces..." data-od-id="search-input">
           <button class="search-clear" aria-label="Limpiar búsqueda" data-od-id="search-clear">✕</button>
         </div>
       </div>
