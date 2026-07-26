@@ -45,6 +45,7 @@ import pdalbert.apps.linked.data.model.Link
 import pdalbert.apps.linked.ui.components.FolderCard
 import pdalbert.apps.linked.ui.components.HomeFAB
 import pdalbert.apps.linked.ui.components.LinkCard
+import pdalbert.apps.linked.ui.components.MoreOptionsDropdown
 import pdalbert.apps.linked.ui.components.SearchBar
 import pdalbert.apps.linked.ui.components.SectionHeaderImproved
 import pdalbert.apps.linked.ui.components.SortDirectionButton
@@ -55,8 +56,10 @@ import pdalbert.apps.linked.ui.theme.Accent
 import pdalbert.apps.linked.ui.theme.Background
 import pdalbert.apps.linked.ui.theme.Ink
 import pdalbert.apps.linked.ui.theme.InkMuted
-import pdalbert.apps.linked.ui.theme.Inter
+import pdalbert.apps.linked.ui.theme.Manrope
 import pdalbert.apps.linked.viewmodel.HomeViewModel
+import pdalbert.apps.linked.ui.theme.Surface
+import pdalbert.apps.linked.ui.theme.White
 
 @Composable
 fun HomeScreen(
@@ -262,6 +265,7 @@ fun HomeScreen(
                                     link = link,
                                     tags = linkTags,
                                     timeAgo = viewModel.getTimeAgo(link.createdAt),
+                                    isFavorite = link.isFavorite,
                                     onClick = { },
                                     onMoreOptions = { },
                                     modifier = Modifier
@@ -353,6 +357,7 @@ fun HomeScreen(
                                     folder = folder,
                                     linkCount = 0,
                                     createdAtText = "",
+                                    isFavorite = folder.isFavorite,
                                     onClick = { },
                                     onMoreOptions = { },
                                     modifier = Modifier

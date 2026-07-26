@@ -22,12 +22,14 @@ class FakeFolderRepository @Inject constructor() : FolderRepository {
                 Folder(
                     name = "Trabajo",
                     emoji = "\uD83D\uDCBC",
-                    bgColor = "#FEF3C7"
+                    bgColor = "#FEF3C7",
+                    isFavorite = true
                 ),
                 Folder(
                     name = "Recursos Dev",
                     emoji = "\uD83D\uDCBB",
-                    bgColor = "#DBEAFE"
+                    bgColor = "#DBEAFE",
+                    isFavorite = true
                 ),
                 Folder(
                     name = "Personal",
@@ -151,5 +153,14 @@ class FakeFolderRepository @Inject constructor() : FolderRepository {
 
     override suspend fun removeLinkFromFolder(folderId: UUID, linkId: UUID) {
         folderLinks.removeAll { it.folderId == folderId && it.linkId == linkId }
+    }
+
+    override suspend fun toggleFavorite(folderId: UUID) {
+        val index = folders.indexOfFirst { it.id == folderId }
+        if (index != -1) {
+            val folder = folders[index]
+            folders[index] = folder.copy(isFavorite = !folder.isFavorite)
+            _folders.value = folders.toList()
+        }
     }
 }
