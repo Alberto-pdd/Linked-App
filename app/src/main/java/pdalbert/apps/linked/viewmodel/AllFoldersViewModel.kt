@@ -11,12 +11,14 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import pdalbert.apps.linked.data.model.Folder
 import pdalbert.apps.linked.data.repository.FolderRepository
+import pdalbert.apps.linked.domain.usecase.FilterFoldersUseCase
 import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
 class AllFoldersViewModel @Inject constructor(
-    private val folderRepository: FolderRepository
+    private val folderRepository: FolderRepository,
+    private val filterFoldersUseCase: FilterFoldersUseCase
 ) : ViewModel() {
 
     val folders: StateFlow<List<Folder>> = folderRepository.getAll()
@@ -25,9 +27,11 @@ class AllFoldersViewModel @Inject constructor(
     private val _searchQuery = MutableStateFlow("")
     val searchQuery: StateFlow<String> = _searchQuery
 
-    val filteredFolders: StateFlow<List<Folder>> = combine(folders, _searchQuery) { allFolders, query ->
-        if (query.isBlank()) allFolders
-        else allFolders.filter { it.name.contains(query, ignoreCase = true) }
+    private val _folderSortOption = MutableStateFlow("Más enlaces")
+    val folderSortOption: StateFlow<String> = _folderSortOption
+
+    val filteredFolders: StateFlow<List<Folder>> = combine(folders, _searchQuery, _folderSortOption) { allFolders, query, sortOption ->
+        filterFoldersUseCase.filter(allFolders, query, sortOption)
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     private val _showAddSheet = MutableStateFlow(false)
@@ -85,6 +89,12 @@ class AllFoldersViewModel @Inject constructor(
 
     fun onDeleteCancelled() {
         _deleteFolderId.value = null
+    }
+
+    fun onToggleFavorite(folderId: UUID) {
+        viewModelScope.launch {
+            folderRepository.toggleFavorite(folderId)
+        }
     }
 
     fun onSheetDismissed() {

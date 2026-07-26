@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import pdalbert.apps.linked.ui.components.DeleteConfirmDialog
 import pdalbert.apps.linked.ui.components.FolderCard
+import pdalbert.apps.linked.ui.components.MoreOptionsDropdown
 import pdalbert.apps.linked.ui.components.SearchBar
 import pdalbert.apps.linked.ui.components.Toast
 import pdalbert.apps.linked.ui.theme.Accent
@@ -243,6 +244,7 @@ fun AllFoldersScreen(
                                 folder = folder,
                                 linkCount = 0,
                                 createdAtText = "",
+                                isFavorite = folder.isFavorite,
                                 onClick = {
                                     if (swipedFolderId == folder.id.toString()) {
                                         swipedFolderId = null
