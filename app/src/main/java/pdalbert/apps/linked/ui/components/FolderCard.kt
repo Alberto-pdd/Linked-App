@@ -12,10 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.outlined.Star
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -38,7 +34,6 @@ fun FolderCard(
     folder: Folder,
     linkCount: Int,
     createdAtText: String = "",
-    isFavorite: Boolean = false,
     onClick: () -> Unit,
     onMoreOptions: (() -> Unit)? = null,
     modifier: Modifier = Modifier
@@ -89,34 +84,15 @@ fun FolderCard(
                     append(" · Creada $createdAtText")
                 }
             }
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
+            Text(
+                text = metaText,
+                fontFamily = Inter,
+                fontWeight = FontWeight.Normal,
+                fontSize = 12.sp,
+                color = InkMuted,
+                lineHeight = 16.sp,
                 modifier = Modifier.padding(top = 2.dp)
-            ) {
-                Text(
-                    text = metaText,
-                    fontFamily = Inter,
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 12.sp,
-                    color = InkMuted,
-                    lineHeight = 16.sp
-                )
-                if (isFavorite) {
-                    Text(
-                        text = " · ",
-                        fontFamily = Inter,
-                        fontWeight = FontWeight.Normal,
-                        fontSize = 12.sp,
-                        color = InkMuted
-                    )
-                    Icon(
-                        imageVector = Icons.Filled.Star,
-                        contentDescription = "Favorito",
-                        tint = Color(0xFFF5A623),
-                        modifier = Modifier.size(12.dp)
-                    )
-                }
-            }
+            )
         }
 
         // More button (⋯)

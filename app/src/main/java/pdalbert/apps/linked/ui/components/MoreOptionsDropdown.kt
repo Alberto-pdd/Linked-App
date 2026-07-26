@@ -28,8 +28,6 @@ fun MoreOptionsDropdown(
     onCopyUrl: (() -> Unit)? = null,
     onShare: (() -> Unit)? = null,
     onOpen: (() -> Unit)? = null,
-    isFavorite: Boolean = false,
-    onToggleFavorite: (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
     var expanded by remember { mutableStateOf(false) }
@@ -91,21 +89,6 @@ fun MoreOptionsDropdown(
             onOpen?.let {
                 DropdownMenuItem(
                     text = { Text("Abrir", fontFamily = Inter, fontSize = 13.sp) },
-                    onClick = {
-                        it()
-                        expanded = false
-                    }
-                )
-            }
-            onToggleFavorite?.let {
-                DropdownMenuItem(
-                    text = {
-                        Text(
-                            text = if (isFavorite) "Quitar de favoritos" else "Marcar como favorito",
-                            fontFamily = Inter,
-                            fontSize = 13.sp
-                        )
-                    },
                     onClick = {
                         it()
                         expanded = false

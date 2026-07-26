@@ -11,7 +11,6 @@ data class Folder(
     val name: String,
     val emoji: String = "\uD83D\uDCC1",
     val bgColor: String = "#FEF3C7",
-    val isFavorite: Boolean = false,
     @Serializable(with = InstantSerializer::class)
     val createdAt: Instant = Instant.parse("2024-01-01T00:00:00Z")
 )

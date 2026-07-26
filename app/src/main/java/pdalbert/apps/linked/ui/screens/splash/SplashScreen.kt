@@ -50,7 +50,7 @@ import pdalbert.apps.linked.ui.theme.Background
 import pdalbert.apps.linked.ui.theme.Border
 import pdalbert.apps.linked.ui.theme.Ink
 import pdalbert.apps.linked.ui.theme.InkMuted
-import pdalbert.apps.linked.ui.theme.Manrope
+import pdalbert.apps.linked.ui.theme.Inter
 import pdalbert.apps.linked.viewmodel.SplashViewModel
 import pdalbert.apps.linked.ui.theme.Surface
 
