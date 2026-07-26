@@ -14,7 +14,6 @@
     --muted: #6B6B66;
     --deco: #7A7A74;
     --accent: #3B82C4;
-    --accent2: #2563EB;
     --accent-bg: #EBF3FB;
     --border: #E2E1DC;
     --border-light: #EFEEEA;
@@ -39,7 +38,6 @@
     min-height: 100vh;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
     padding: 20px;
-    gap: 28px;
     flex-wrap: wrap;
   }
 
@@ -97,7 +95,7 @@
   .header-left {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     cursor: pointer;
   }
   .header-left svg {
@@ -139,6 +137,8 @@
     color: var(--fg);
   }
   .search-bar input::placeholder { color: var(--deco); }
+  .search-bar input::-webkit-search-cancel-button,
+  .search-bar input::-webkit-search-decoration { -webkit-appearance: none; margin: 0; }
   .search-clear {
     width: 32px; height: 32px;
     border-radius: 50%;
@@ -210,6 +210,7 @@
     border-radius: 99px;
     padding: 2px 10px;
     line-height: 18px;
+    letter-spacing: 0.01em;
     cursor: pointer;
     font-family: inherit;
     display: inline-flex;
@@ -220,27 +221,29 @@
   }
   .section-filter-btn:hover { border-color: var(--accent); color: var(--accent); }
   .sort-dir-btn {
-    width: 22px; height: 22px;
-    border-radius: 50%;
+    border-radius: 99px;
     border: 1px solid var(--border);
     background: var(--surface);
     color: var(--deco);
-    font-size: 13px;
+    font-size: 11px;
     font-weight: 600;
+    letter-spacing: 0.01em;
     display: inline-flex;
     align-items: center;
-    justify-content: center;
+    gap: 4px;
     cursor: pointer;
     font-family: inherit;
-    padding: 0;
-    line-height: 1;
+    padding: 2px 10px;
+    line-height: 18px;
     transition: all 0.15s;
+    white-space: nowrap;
   }
   .sort-dir-btn:hover { border-color: var(--accent); color: var(--accent); }
   .result-count {
     font-size: 12px;
     font-weight: 600;
     color: var(--muted);
+    letter-spacing: 0.01em;
   }
 
   .filter-dropdown-menu {
@@ -316,11 +319,17 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
+  .link-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 4px;
+  }
   .link-time {
     font-size: 11px;
     color: var(--deco);
     line-height: 1.3;
-    margin-top: 4px;
+    letter-spacing: 0.01em;
   }
   .link-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
   .link-tag {
@@ -328,6 +337,7 @@
     padding: 3px 10px;
     font-size: 11px;
     font-weight: 600;
+    letter-spacing: 0.01em;
     line-height: 1.3;
     white-space: nowrap;
   }
@@ -381,6 +391,62 @@
   .context-menu-item:hover { background: var(--border-light); }
   .context-menu-item.danger { color: var(--danger); }
   .context-menu-item svg { flex-shrink: 0; }
+
+  /* ============ TAG COLORS ============ */
+  .link-tag.tag-diseno { background: var(--yellow-bg); color: #92630A; }
+  .link-tag.tag-ia { background: var(--green-bg); color: var(--success); }
+  .link-tag.tag-dev { background: var(--purple-bg); color: #5B21B6; }
+  .link-tag.tag-video { background: #FEF3C7; color: #92630A; }
+  .link-tag.tag-noticias { background: var(--accent-bg); color: #1E40AF; }
+
+  /* ============ FOLDER BADGE ============ */
+  .folder-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: var(--deco);
+    background: var(--border-light);
+    border-radius: 99px;
+    padding: 2px 7px;
+    line-height: 1.3;
+    white-space: nowrap;
+  }
+  .folder-badge svg { width: 10px; height: 10px; flex-shrink: 0; }
+
+  /* ============ SKELETON LOADING ============ */
+  .skeleton-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 12px 16px;
+  }
+  .skeleton-card.hidden { display: none; }
+  .skel-box {
+    width: 40px; height: 40px;
+    border-radius: var(--radius-sm);
+    background: var(--border-light);
+    flex-shrink: 0;
+    animation: skel-pulse 1.5s ease-in-out infinite;
+  }
+  .skel-lines { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+  .skel-line {
+    height: 12px;
+    border-radius: 6px;
+    background: var(--border-light);
+    animation: skel-pulse 1.5s ease-in-out infinite;
+  }
+  .skel-line.w60 { width: 60%; }
+  .skel-line.w40 { width: 40%; }
+  @keyframes skel-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.45; }
+  }
 
   /* ============ EMPTY STATE ============ */
   .empty-state {
@@ -460,7 +526,7 @@
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#888880" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
           </svg>
-          <input type="search" placeholder="Buscar enlaces..." data-od-id="search-input">
+          <input type="search" placeholder="Buscar en tus links…" data-od-id="search-input">
           <button class="search-clear" aria-label="Limpiar búsqueda" data-od-id="search-clear">✕</button>
         </div>
       </div>
@@ -486,107 +552,121 @@
               <button class="filter-dropdown-item" data-value="Este mes">Este mes</button>
             </div>
           </span>
-          <button class="sort-dir-btn" data-od-id="sort-dir" aria-label="Cambiar orden">↓</button>
+          <button class="sort-dir-btn" data-od-id="sort-dir" aria-label="Cambiar orden"><span data-od-id="sort-label">Fecha</span> <span data-od-id="sort-arrow">↓</span></button>
         </div>
-        <span class="result-count" data-od-id="result-count">6 enlaces</span>
+        <span class="result-count" data-od-id="result-count">8 enlaces</span>
       </div>
 
       <!-- Links list -->
       <div class="scroll-section">
         <div class="link-list" data-od-id="links-list">
 
-          <div class="link-card" data-od-id="link-card-1" data-filter-tags="diseño" data-time="2026-07-13T07:00:00">
+          <!-- Skeleton cards (shown during loading) -->
+          <div class="skeleton-card hidden" data-od-id="skel-1">
+            <div class="skel-box"></div>
+            <div class="skel-lines"><div class="skel-line w60"></div><div class="skel-line w40"></div></div>
+          </div>
+          <div class="skeleton-card hidden" data-od-id="skel-2">
+            <div class="skel-box"></div>
+            <div class="skel-lines"><div class="skel-line w60"></div><div class="skel-line w40"></div></div>
+          </div>
+          <div class="skeleton-card hidden" data-od-id="skel-3">
+            <div class="skel-box"></div>
+            <div class="skel-lines"><div class="skel-line w60"></div><div class="skel-line w40"></div></div>
+          </div>
+
+          <div class="link-card" data-od-id="link-card-1" data-filter-tags="diseño" data-time="2026-07-13T07:00:00" data-folder="Proyectos">
             <div class="link-emoji-box" style="background:#EBF3FB;">🎨</div>
             <div class="link-body">
               <div class="link-title">Diseño de sistemas atómicos</div>
-              <div class="link-time">hace 2 h</div>
+              <div class="link-meta"><span class="link-time">hace 2 h</span><span class="folder-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>Proyectos</span></div>
             </div>
             <div class="link-right">
-              <div class="link-tag" style="background:#FEF3C7;color:#92630A;">diseño</div>
+              <div class="link-tag tag-diseno">diseño</div>
               <button class="link-more" aria-label="Más opciones" data-od-id="link-more-1">⋯</button>
             </div>
           </div>
 
-          <div class="link-card" data-od-id="link-card-2" data-filter-tags="ia" data-time="2026-07-13T03:00:00">
+          <div class="link-card" data-od-id="link-card-2" data-filter-tags="ia" data-time="2026-07-13T03:00:00" data-folder="">
             <div class="link-emoji-box" style="background:#DCFCE7;">🤖</div>
             <div class="link-body">
               <div class="link-title">Claude 3.5 Sonnet release notes</div>
-              <div class="link-time">hace 6 h</div>
+              <div class="link-meta"><span class="link-time">hace 6 h</span></div>
             </div>
             <div class="link-right">
-              <div class="link-tag" style="background:#DCFCE7;color:#166534;">ia</div>
+              <div class="link-tag tag-ia">ia</div>
               <button class="link-more" aria-label="Más opciones" data-od-id="link-more-2">⋯</button>
             </div>
           </div>
 
-          <div class="link-card" data-od-id="link-card-3" data-filter-tags="dev" data-time="2026-07-12T09:00:00">
+          <div class="link-card" data-od-id="link-card-3" data-filter-tags="dev" data-time="2026-07-12T09:00:00" data-folder="App Android">
             <div class="link-emoji-box" style="background:#EDE9FE;">📱</div>
             <div class="link-body">
               <div class="link-title">Jetpack Compose navigation guide</div>
-              <div class="link-time">ayer</div>
+              <div class="link-meta"><span class="link-time">ayer</span><span class="folder-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>App Android</span></div>
             </div>
             <div class="link-right">
-              <div class="link-tag" style="background:#EDE9FE;color:#5B21B6;">dev</div>
+              <div class="link-tag tag-dev">dev</div>
               <button class="link-more" aria-label="Más opciones" data-od-id="link-more-3">⋯</button>
             </div>
           </div>
 
-          <div class="link-card" data-od-id="link-card-4" data-filter-tags="video" data-time="2026-07-11T14:00:00">
+          <div class="link-card" data-od-id="link-card-4" data-filter-tags="video" data-time="2026-07-11T14:00:00" data-folder="">
             <div class="link-emoji-box" style="background:#FEF3C7;">🎬</div>
             <div class="link-body">
               <div class="link-title">Figma Config 2026 — Keynote</div>
-              <div class="link-time">hace 2 d</div>
+              <div class="link-meta"><span class="link-time">hace 2 d</span></div>
             </div>
             <div class="link-right">
-              <div class="link-tag" style="background:#FEF3C7;color:#92630A;">video</div>
+              <div class="link-tag tag-video">video</div>
               <button class="link-more" aria-label="Más opciones" data-od-id="link-more-4">⋯</button>
             </div>
           </div>
 
-          <div class="link-card" data-od-id="link-card-5" data-filter-tags="noticias" data-time="2026-07-10T09:00:00">
+          <div class="link-card" data-od-id="link-card-5" data-filter-tags="noticias" data-time="2026-07-10T09:00:00" data-folder="Inspiración">
             <div class="link-emoji-box" style="background:#EBF3FB;">📰</div>
             <div class="link-body">
               <div class="link-title">Android 17 announced at Google I/O</div>
-              <div class="link-time">hace 3 d</div>
+              <div class="link-meta"><span class="link-time">hace 3 d</span><span class="folder-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>Inspiración</span></div>
             </div>
             <div class="link-right">
-              <div class="link-tag" style="background:#EBF3FB;color:#1E40AF;">noticias</div>
+              <div class="link-tag tag-noticias">noticias</div>
               <button class="link-more" aria-label="Más opciones" data-od-id="link-more-5">⋯</button>
             </div>
           </div>
 
-          <div class="link-card" data-od-id="link-card-6" data-filter-tags="diseño" data-time="2026-07-09T10:00:00">
+          <div class="link-card" data-od-id="link-card-6" data-filter-tags="diseño" data-time="2026-07-09T10:00:00" data-folder="">
             <div class="link-emoji-box" style="background:#EDE9FE;">🖌️</div>
             <div class="link-body">
               <div class="link-title">Principios de diseño Material You</div>
-              <div class="link-time">hace 4 d</div>
+              <div class="link-meta"><span class="link-time">hace 4 d</span></div>
             </div>
             <div class="link-right">
-              <div class="link-tag" style="background:#FEF3C7;color:#92630A;">diseño</div>
+              <div class="link-tag tag-diseno">diseño</div>
               <button class="link-more" aria-label="Más opciones" data-od-id="link-more-6">⋯</button>
             </div>
           </div>
 
-          <div class="link-card" data-od-id="link-card-7" data-filter-tags="ia" data-time="2026-07-08T11:00:00">
+          <div class="link-card" data-od-id="link-card-7" data-filter-tags="ia" data-time="2026-07-08T11:00:00" data-folder="IA Toolkit">
             <div class="link-emoji-box" style="background:#DCFCE7;">🧠</div>
             <div class="link-body">
               <div class="link-title">Prompt engineering best practices</div>
-              <div class="link-time">hace 5 d</div>
+              <div class="link-meta"><span class="link-time">hace 5 d</span><span class="folder-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>IA Toolkit</span></div>
             </div>
             <div class="link-right">
-              <div class="link-tag" style="background:#DCFCE7;color:#166534;">ia</div>
+              <div class="link-tag tag-ia">ia</div>
               <button class="link-more" aria-label="Más opciones" data-od-id="link-more-7">⋯</button>
             </div>
           </div>
 
-          <div class="link-card" data-od-id="link-card-8" data-filter-tags="dev" data-time="2026-07-07T08:00:00">
+          <div class="link-card" data-od-id="link-card-8" data-filter-tags="dev" data-time="2026-07-07T08:00:00" data-folder="App Android">
             <div class="link-emoji-box" style="background:#EDE9FE;">⚡</div>
             <div class="link-body">
               <div class="link-title">Kotlin coroutines deep dive</div>
-              <div class="link-time">hace 6 d</div>
+              <div class="link-meta"><span class="link-time">hace 6 d</span><span class="folder-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>App Android</span></div>
             </div>
             <div class="link-right">
-              <div class="link-tag" style="background:#EDE9FE;color:#5B21B6;">dev</div>
+              <div class="link-tag tag-dev">dev</div>
               <button class="link-more" aria-label="Más opciones" data-od-id="link-more-8">⋯</button>
             </div>
           </div>
@@ -746,7 +826,7 @@
 
   sortDir.addEventListener('click', () => {
     asc = !asc;
-    sortDir.textContent = asc ? '↑' : '↓';
+    document.querySelector('[data-od-id="sort-arrow"]').textContent = asc ? '↑' : '↓';
     applyAllFilters();
   });
 
@@ -755,15 +835,29 @@
     applyAllFilters();
   });
 
-  // Context menu
+  // Context menu — fixed positioning relative to phone, with scroll awareness
   document.querySelectorAll('.link-more').forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
       const card = btn.closest('.link-card');
-      const rect = card.getBoundingClientRect();
-      const phoneRect = document.querySelector('.phone').getBoundingClientRect();
+      const phone = document.querySelector('.phone');
+      const scrollSection = document.querySelector('.scroll-section');
+      const phoneRect = phone.getBoundingClientRect();
+      const cardRect = card.getBoundingClientRect();
 
-      contextMenu.style.top = (rect.bottom - phoneRect.top + 4) + 'px';
+      // Position below card, but flip above if not enough space
+      const spaceBelow = phoneRect.bottom - cardRect.bottom - 60;
+      let top;
+      if (spaceBelow > 160) {
+        top = cardRect.bottom - phoneRect.top + 4;
+      } else {
+        top = cardRect.top - phoneRect.top - 160;
+      }
+
+      // Clamp: don't go above status bar or below phone
+      top = Math.max(80, Math.min(top, phoneRect.height - 180));
+
+      contextMenu.style.top = top + 'px';
       contextMenu.classList.add('open');
       activeContextMenu = card;
     });
@@ -786,12 +880,20 @@
     });
   });
 
+  // Skeleton loading simulation
+  const skeletons = document.querySelectorAll('.skeleton-card');
+  skeletons.forEach(s => s.classList.remove('hidden'));
+  linkCards.forEach(c => c.style.display = 'none');
+
+  setTimeout(() => {
+    skeletons.forEach(s => s.classList.add('hidden'));
+    applyAllFilters();
+  }, 1200);
+
   // Back button
   document.querySelector('[data-od-id="back-button"]').addEventListener('click', () => {
     console.log('Volver al Home');
   });
-
-  applyAllFilters();
 </script>
 </body>
 </html>
