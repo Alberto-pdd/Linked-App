@@ -26,7 +26,6 @@ data class Link(
     val emoji: String = "\uD83D\uDD17",
     val bgColor: String = "#EBF3FB",
     val description: String = "",
-    val isFavorite: Boolean = false,
     @Serializable(with = InstantSerializer::class)
     val createdAt: Instant = Clock.System.now(),
     @Serializable(with = InstantSerializer::class)

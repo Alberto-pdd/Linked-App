@@ -38,7 +38,6 @@ class FakeLinkRepository @Inject constructor() : LinkRepository {
                     emoji = "🎨",
                     bgColor = "#F3E8FF",
                     description = "Herramienta de diseño colaborativo",
-                    isFavorite = true,
                     createdAt = now.minus(2 * 3600 * 1000L, DateTimeUnit.MILLISECOND),
                     modifiedAt = now.minus(2 * 3600 * 1000L, DateTimeUnit.MILLISECOND)
                 ),
@@ -48,7 +47,6 @@ class FakeLinkRepository @Inject constructor() : LinkRepository {
                     emoji = "🤖",
                     bgColor = "#E0F2FE",
                     description = "Asistente de IA avanzado",
-                    isFavorite = true,
                     createdAt = now.minus(5 * 3600 * 1000L, DateTimeUnit.MILLISECOND),
                     modifiedAt = now.minus(5 * 3600 * 1000L, DateTimeUnit.MILLISECOND)
                 ),
@@ -244,14 +242,5 @@ class FakeLinkRepository @Inject constructor() : LinkRepository {
 
     override suspend fun removeTagFromLink(linkId: UUID, tagId: UUID) {
         linkTags.removeAll { it.linkId == linkId && it.tagId == tagId }
-    }
-
-    override suspend fun toggleFavorite(linkId: UUID) {
-        val index = links.indexOfFirst { it.id == linkId }
-        if (index != -1) {
-            val link = links[index]
-            links[index] = link.copy(isFavorite = !link.isFavorite)
-            _links.value = links.toList()
-        }
     }
 }

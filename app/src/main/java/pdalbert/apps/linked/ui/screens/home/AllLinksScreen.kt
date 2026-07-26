@@ -37,7 +37,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import pdalbert.apps.linked.ui.components.DeleteConfirmDialog
 import pdalbert.apps.linked.ui.components.LinkCard
-import pdalbert.apps.linked.ui.components.MoreOptionsDropdown
 import pdalbert.apps.linked.ui.components.SearchBar
 import pdalbert.apps.linked.ui.components.TagFilterChips
 import pdalbert.apps.linked.ui.components.Toast
@@ -46,8 +45,7 @@ import pdalbert.apps.linked.ui.theme.Background
 import pdalbert.apps.linked.ui.theme.Danger
 import pdalbert.apps.linked.ui.theme.Ink
 import pdalbert.apps.linked.ui.theme.InkMuted
-import pdalbert.apps.linked.ui.theme.Manrope
-import pdalbert.apps.linked.ui.theme.Surface
+import pdalbert.apps.linked.ui.theme.Inter
 import pdalbert.apps.linked.viewmodel.AllLinksViewModel
 
 @Composable
@@ -260,15 +258,13 @@ fun AllLinksScreen(
                                 link = link,
                                 tags = linkTags,
                                 timeAgo = viewModel.getTimeAgo(link.createdAt),
-                                isFavorite = link.isFavorite,
                                 onClick = {
                                     if (swipedLinkId == link.id.toString()) {
                                         swipedLinkId = null
                                     } else if (swipedLinkId != null) {
                                         swipedLinkId = null
                                     }
-                                },
-                                onMoreOptions = { }
+                                }
                             )
                         }
                     }

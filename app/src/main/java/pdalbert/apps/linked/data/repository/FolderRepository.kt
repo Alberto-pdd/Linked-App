@@ -15,5 +15,4 @@ interface FolderRepository {
     suspend fun delete(id: UUID)
     suspend fun addLinkToFolder(folderId: UUID, linkId: UUID)
     suspend fun removeLinkFromFolder(folderId: UUID, linkId: UUID)
-    suspend fun toggleFavorite(folderId: UUID)
 }

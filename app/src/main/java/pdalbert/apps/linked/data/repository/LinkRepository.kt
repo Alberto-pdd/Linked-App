@@ -18,5 +18,4 @@ interface LinkRepository {
     suspend fun delete(id: UUID)
     suspend fun addTagToLink(linkId: UUID, tagId: UUID)
     suspend fun removeTagFromLink(linkId: UUID, tagId: UUID)
-    suspend fun toggleFavorite(linkId: UUID)
 }
