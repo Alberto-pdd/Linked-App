@@ -32,7 +32,7 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
-    background: #ffffff;
+    background: var(--bg);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -114,15 +114,15 @@
     justify-content: center;
     width: 36px;
     height: 36px;
-    border-radius: 12px;
-    background: none;
+    border-radius: 10px;
+    background: #fbfbf9;
     border: none;
     cursor: pointer;
-    color: var(--fg);
+    color: #3c3c43;
     font-size: 20px;
     transition: background 0.15s;
   }
-  .back-btn:hover { background: var(--border-light); }
+  .back-btn:hover { background: #f0f0ed; }
   .header-title {
     font-size: 18px;
     font-weight: 800;
@@ -153,7 +153,7 @@
   .save-btn:hover { background: #2E6FA3; }
   .save-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
-  /* ============ EMOJI + COLOR HERO ============ */
+  /* ============ EMOJI PREVIEW ============ */
   .hero-section {
     display: flex;
     flex-direction: column;
@@ -176,21 +176,6 @@
     position: relative;
   }
   .emoji-preview:hover { transform: scale(1.04); }
-  .emoji-preview .edit-badge {
-    position: absolute;
-    bottom: -4px;
-    right: -4px;
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    background: var(--surface);
-    border: 2px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 11px;
-    color: var(--muted);
-  }
 
   /* Emoji Picker */
   .emoji-picker {
@@ -236,14 +221,7 @@
     position: relative;
   }
   .color-option:hover { transform: scale(1.1); }
-  .color-option.selected { border-color: var(--fg); }
-  .color-option.selected::after {
-    content: '';
-    position: absolute;
-    inset: 4px;
-    border-radius: 50%;
-    border: 2px solid var(--surface);
-  }
+  .color-option.selected { transform: scale(1.2); border-color: var(--border); }
 
   /* ============ FORM CARD ============ */
   .form-card {
@@ -282,6 +260,9 @@
     letter-spacing: 0.4px;
     text-transform: uppercase;
     margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
   }
   .form-input {
     width: 100%;
@@ -319,6 +300,36 @@
     font-size: 11px;
     flex-shrink: 0;
   }
+
+  /* URL validation */
+  .url-validation {
+    display: none;
+    align-items: center;
+    gap: 5px;
+    margin-left: 6px;
+  }
+  .url-validation.visible { display: inline-flex; }
+  .url-validation-icon {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    flex-shrink: 0;
+    font-weight: 700;
+  }
+  .url-validation.valid .url-validation-icon { background: var(--success); color: #fff; }
+  .url-validation.invalid .url-validation-icon { background: var(--danger); color: #fff; }
+  .url-validation-text {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  .url-validation.valid .url-validation-text { color: var(--success); }
+  .url-validation.invalid .url-validation-text { color: var(--danger); }
 
   /* ============ TAG INPUT ============ */
   .tag-input-row {
@@ -425,7 +436,7 @@
     gap: 6px;
     padding: 10px;
     background: none;
-    border: 1.5px dashed var(--border);
+    border: 1.5px dashed transparent;
     border-radius: var(--radius-sm);
     color: var(--muted);
     font-size: 13px;
@@ -433,6 +444,7 @@
     cursor: pointer;
     transition: all 0.12s;
     font-family: inherit;
+    text-decoration: none;
   }
   .folder-add-new:hover { border-color: var(--accent); color: var(--accent); }
 
@@ -461,7 +473,8 @@
     gap: 10px;
     padding: 12px 20px 20px;
     flex-shrink: 0;
-    background: linear-gradient(to top, var(--bg) 70%, transparent);
+    background: var(--bg);
+    border-top: 1px solid var(--border-light);
   }
   .btn-cancel {
     flex: 1;
@@ -499,6 +512,27 @@
   }
   .btn-save:hover { background: #2E6FA3; }
   .btn-save:active { transform: scale(0.98); }
+  .btn-save:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* ============ TOAST ============ */
+  .toast {
+    position: fixed;
+    top: 40px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-120px);
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    z-index: 9999;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    pointer-events: none;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+  .toast.success { background: #DCFCE7; color: #166534; border: 1px solid #BBF7D0; }
+  .toast.error { background: #FFE4E6; color: #BE123C; border: 1px solid #FECDD3; }
 
   /* ============ HOME INDICATOR ============ */
   .home-indicator {
@@ -522,10 +556,13 @@
 </head>
 <body>
 
+  <!-- Toast notification -->
+  <div class="toast" id="toast"></div>
+
   <!-- ====== NEW LINK (Empty form) ====== -->
   <div>
     <div class="phone-label">● Nuevo enlace</div>
-    <div class="phone">
+    <div class="phone" id="phone-new">
       <div class="status-bar">
         <span class="time">9:41</span>
         <span class="icons">●● ●●</span>
@@ -535,52 +572,48 @@
         <!-- Header -->
         <div class="header">
           <div class="header-left">
-            <button class="back-btn" title="Volver">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+            <button class="back-btn" title="Volver" onclick="showToast('Volviendo...', 'success')">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M15 19l-7-7 7-7"/></svg>
             </button>
             <span class="header-title">Nuevo enlace</span>
-          </div>
-          <div class="header-actions">
-            <button class="save-btn" disabled>Guardar</button>
           </div>
         </div>
 
         <div class="scroll-section">
-          <!-- Emoji + Color -->
+          <!-- Emoji Preview -->
           <div class="hero-section">
-            <div class="emoji-preview" style="background:#EBF3FB;">
+            <div class="emoji-preview" id="emoji-preview-new" style="background:#EBF3FB;">
               🔗
-              <div class="edit-badge">✏️</div>
             </div>
           </div>
 
           <!-- Emoji Picker -->
-          <div class="emoji-picker">
-            <div class="emoji-option selected">🔗</div>
-            <div class="emoji-option">🎨</div>
-            <div class="emoji-option">🤖</div>
-            <div class="emoji-option">📰</div>
-            <div class="emoji-option">🎬</div>
-            <div class="emoji-option">⚙️</div>
-            <div class="emoji-option">📊</div>
-            <div class="emoji-option">🌐</div>
-            <div class="emoji-option">📖</div>
-            <div class="emoji-option">⭐</div>
-            <div class="emoji-option">💡</div>
-            <div class="emoji-option">🚀</div>
-            <div class="emoji-option">🎯</div>
-            <div class="emoji-option">📱</div>
-            <div class="emoji-option">🔖</div>
+          <div class="emoji-picker" id="emoji-picker-new">
+            <div class="emoji-option selected" data-emoji="🔗">🔗</div>
+            <div class="emoji-option" data-emoji="🎨">🎨</div>
+            <div class="emoji-option" data-emoji="🤖">🤖</div>
+            <div class="emoji-option" data-emoji="📰">📰</div>
+            <div class="emoji-option" data-emoji="🎬">🎬</div>
+            <div class="emoji-option" data-emoji="⚙️">⚙️</div>
+            <div class="emoji-option" data-emoji="📊">📊</div>
+            <div class="emoji-option" data-emoji="🌐">🌐</div>
+            <div class="emoji-option" data-emoji="📖">📖</div>
+            <div class="emoji-option" data-emoji="⭐">⭐</div>
+            <div class="emoji-option" data-emoji="💡">💡</div>
+            <div class="emoji-option" data-emoji="🚀">🚀</div>
+            <div class="emoji-option" data-emoji="🎯">🎯</div>
+            <div class="emoji-option" data-emoji="📱">📱</div>
+            <div class="emoji-option" data-emoji="🔖">🔖</div>
           </div>
 
           <!-- Color Picker -->
-          <div class="color-picker">
-            <div class="color-option" style="background:#FEF3C7;"></div>
-            <div class="color-option" style="background:#DCFCE7;"></div>
-            <div class="color-option selected" style="background:#EBF3FB;"></div>
-            <div class="color-option" style="background:#EDE9FE;"></div>
-            <div class="color-option" style="background:#FFE4E6;"></div>
-            <div class="color-option" style="background:#F0FDF4;"></div>
+          <div class="color-picker" id="color-picker-new">
+            <div class="color-option" data-color="#FEF3C7" style="background:#FEF3C7;"></div>
+            <div class="color-option" data-color="#DCFCE7" style="background:#DCFCE7;"></div>
+            <div class="color-option selected" data-color="#EBF3FB" style="background:#EBF3FB;"></div>
+            <div class="color-option" data-color="#EDE9FE" style="background:#EDE9FE;"></div>
+            <div class="color-option" data-color="#FFE4E6" style="background:#FFE4E6;"></div>
+            <div class="color-option" data-color="#F0FDF4" style="background:#F0FDF4;"></div>
           </div>
 
           <!-- Form: URL -->
@@ -588,9 +621,9 @@
             <div class="form-row">
               <div class="form-row-icon">🔗</div>
               <div class="form-row-body">
-                <div class="form-label">URL</div>
-                <input class="form-input" type="url" placeholder="https://ejemplo.com">
-                <div class="form-row-hint">Pega un enlace para comenzar</div>
+                <div class="form-label">URL <span class="url-validation" id="url-validation-new"><span class="url-validation-icon"></span><span class="url-validation-text"></span></span></div>
+                <input class="form-input" type="url" id="url-input-new" placeholder="https://ejemplo.com">
+                <div class="form-row-hint" id="url-hint-new">Pega un enlace para comenzar</div>
               </div>
             </div>
           </div>
@@ -601,7 +634,7 @@
               <div class="form-row-icon">✏️</div>
               <div class="form-row-body">
                 <div class="form-label">Título</div>
-                <input class="form-input" type="text" placeholder="Nombre del enlace">
+                <input class="form-input" type="text" id="title-input-new" placeholder="Nombre del enlace">
               </div>
             </div>
           </div>
@@ -612,15 +645,16 @@
               <div class="form-row-icon">🏷️</div>
               <div class="form-row-body">
                 <div class="form-label">Etiqueta</div>
-                <input class="form-input" type="text" placeholder="Escribe y pulsa Enter">
+                <input class="form-input" type="text" id="tag-input-new" placeholder="Escribe y pulsa Enter">
               </div>
             </div>
-            <div class="tag-suggestions">
-              <span class="tag-suggestion">diseño</span>
-              <span class="tag-suggestion">ia</span>
-              <span class="tag-suggestion">dev</span>
-              <span class="tag-suggestion">video</span>
-              <span class="tag-suggestion">noticias</span>
+            <div class="tag-input-row" id="tag-chips-new"></div>
+            <div class="tag-suggestions" id="tag-suggestions-new">
+              <span class="tag-suggestion" data-tag="diseño">diseño</span>
+              <span class="tag-suggestion" data-tag="ia">ia</span>
+              <span class="tag-suggestion" data-tag="dev">dev</span>
+              <span class="tag-suggestion" data-tag="video">video</span>
+              <span class="tag-suggestion" data-tag="noticias">noticias</span>
             </div>
           </div>
 
@@ -630,28 +664,28 @@
               <div class="form-row-icon">📁</div>
               <div class="form-row-body">
                 <div class="form-label">Carpeta</div>
-                <input class="form-input" type="text" placeholder="Selecciona una carpeta" readonly style="cursor:pointer;">
+                <input class="form-input" type="text" id="folder-input-new" placeholder="Selecciona una carpeta" readonly style="cursor:pointer;">
               </div>
               <div class="form-row-arrow">›</div>
             </div>
-            <div class="folder-grid">
-              <div class="folder-option">
+            <div class="folder-grid" id="folder-grid-new">
+              <div class="folder-option" data-folder="Frontend">
                 <div class="folder-option-icon" style="background:#FEF3C7;">📁</div>
                 <div class="folder-option-name">Frontend</div>
               </div>
-              <div class="folder-option">
+              <div class="folder-option" data-folder="Recursos IA">
                 <div class="folder-option-icon" style="background:#EBF3FB;">🧠</div>
                 <div class="folder-option-name">Recursos IA</div>
               </div>
-              <div class="folder-option">
+              <div class="folder-option" data-folder="Diseño UX">
                 <div class="folder-option-icon" style="background:#EDE9FE;">🎨</div>
                 <div class="folder-option-name">Diseño UX</div>
               </div>
-              <div class="folder-option">
+              <div class="folder-option" data-folder="Backend">
                 <div class="folder-option-icon" style="background:#DCFCE7;">⚙️</div>
                 <div class="folder-option-name">Backend</div>
               </div>
-              <button class="folder-add-new">+ Nueva carpeta</button>
+              <a href="add-folder.html" class="folder-add-new">+ Nueva carpeta</a>
             </div>
           </div>
 
@@ -664,15 +698,15 @@
               </div>
             </div>
             <div class="notes-area">
-              <textarea class="notes-textarea" placeholder="Añade una descripción o notas..."></textarea>
+              <textarea class="notes-textarea" id="notes-new" placeholder="Añade una descripción o notas..."></textarea>
             </div>
           </div>
         </div>
 
         <!-- Bottom Bar -->
         <div class="bottom-bar">
-          <button class="btn-cancel">Cancelar</button>
-          <button class="btn-save" disabled>
+          <button class="btn-cancel" onclick="showToast('Cancelado', 'success')">Cancelar</button>
+          <button class="btn-save" disabled id="save-btn-bottom-new">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
             Guardar enlace
           </button>
@@ -688,7 +722,7 @@
   <!-- ====== EDIT LINK (Pre-filled) ====== -->
   <div>
     <div class="phone-label">● Editar enlace</div>
-    <div class="phone">
+    <div class="phone" id="phone-edit">
       <div class="status-bar">
         <span class="time">9:41</span>
         <span class="icons">●● ●●</span>
@@ -698,52 +732,48 @@
         <!-- Header -->
         <div class="header">
           <div class="header-left">
-            <button class="back-btn" title="Volver">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+            <button class="back-btn" title="Volver" onclick="showToast('Volviendo...', 'success')">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M15 19l-7-7 7-7"/></svg>
             </button>
             <span class="header-title">Editar enlace</span>
-          </div>
-          <div class="header-actions">
-            <button class="save-btn">Guardar</button>
           </div>
         </div>
 
         <div class="scroll-section">
-          <!-- Emoji + Color -->
+          <!-- Emoji Preview -->
           <div class="hero-section">
-            <div class="emoji-preview" style="background:#EBF3FB;">
+            <div class="emoji-preview" id="emoji-preview-edit" style="background:#EBF3FB;">
               🎨
-              <div class="edit-badge">✏️</div>
             </div>
           </div>
 
           <!-- Emoji Picker -->
-          <div class="emoji-picker">
-            <div class="emoji-option">🔗</div>
-            <div class="emoji-option selected">🎨</div>
-            <div class="emoji-option">🤖</div>
-            <div class="emoji-option">📰</div>
-            <div class="emoji-option">🎬</div>
-            <div class="emoji-option">⚙️</div>
-            <div class="emoji-option">📊</div>
-            <div class="emoji-option">🌐</div>
-            <div class="emoji-option">📖</div>
-            <div class="emoji-option">⭐</div>
-            <div class="emoji-option">💡</div>
-            <div class="emoji-option">🚀</div>
-            <div class="emoji-option">🎯</div>
-            <div class="emoji-option">📱</div>
-            <div class="emoji-option">🔖</div>
+          <div class="emoji-picker" id="emoji-picker-edit">
+            <div class="emoji-option" data-emoji="🔗">🔗</div>
+            <div class="emoji-option selected" data-emoji="🎨">🎨</div>
+            <div class="emoji-option" data-emoji="🤖">🤖</div>
+            <div class="emoji-option" data-emoji="📰">📰</div>
+            <div class="emoji-option" data-emoji="🎬">🎬</div>
+            <div class="emoji-option" data-emoji="⚙️">⚙️</div>
+            <div class="emoji-option" data-emoji="📊">📊</div>
+            <div class="emoji-option" data-emoji="🌐">🌐</div>
+            <div class="emoji-option" data-emoji="📖">📖</div>
+            <div class="emoji-option" data-emoji="⭐">⭐</div>
+            <div class="emoji-option" data-emoji="💡">💡</div>
+            <div class="emoji-option" data-emoji="🚀">🚀</div>
+            <div class="emoji-option" data-emoji="🎯">🎯</div>
+            <div class="emoji-option" data-emoji="📱">📱</div>
+            <div class="emoji-option" data-emoji="🔖">🔖</div>
           </div>
 
           <!-- Color Picker -->
-          <div class="color-picker">
-            <div class="color-option" style="background:#FEF3C7;"></div>
-            <div class="color-option" style="background:#DCFCE7;"></div>
-            <div class="color-option selected" style="background:#EBF3FB;"></div>
-            <div class="color-option" style="background:#EDE9FE;"></div>
-            <div class="color-option" style="background:#FFE4E6;"></div>
-            <div class="color-option" style="background:#F0FDF4;"></div>
+          <div class="color-picker" id="color-picker-edit">
+            <div class="color-option" data-color="#FEF3C7" style="background:#FEF3C7;"></div>
+            <div class="color-option" data-color="#DCFCE7" style="background:#DCFCE7;"></div>
+            <div class="color-option selected" data-color="#EBF3FB" style="background:#EBF3FB;"></div>
+            <div class="color-option" data-color="#EDE9FE" style="background:#EDE9FE;"></div>
+            <div class="color-option" data-color="#FFE4E6" style="background:#FFE4E6;"></div>
+            <div class="color-option" data-color="#F0FDF4" style="background:#F0FDF4;"></div>
           </div>
 
           <!-- Form: URL -->
@@ -751,9 +781,8 @@
             <div class="form-row">
               <div class="form-row-icon">🔗</div>
               <div class="form-row-body">
-                <div class="form-label">URL</div>
-                <input class="form-input" type="url" value="figma.com/resource/atomic-design">
-                <div class="form-row-check">✓</div>
+                <div class="form-label">URL <span class="url-validation valid visible" id="url-validation-edit"><span class="url-validation-icon">✓</span><span class="url-validation-text">Enlace válido</span></span></div>
+                <input class="form-input" type="url" id="url-input-edit" value="figma.com/resource/atomic-design">
               </div>
             </div>
           </div>
@@ -764,7 +793,7 @@
               <div class="form-row-icon">✏️</div>
               <div class="form-row-body">
                 <div class="form-label">Título</div>
-                <input class="form-input" type="text" value="Diseño de sistemas atómicos">
+                <input class="form-input" type="text" id="title-input-edit" value="Diseño de sistemas atómicos">
               </div>
             </div>
           </div>
@@ -775,19 +804,19 @@
               <div class="form-row-icon">🏷️</div>
               <div class="form-row-body">
                 <div class="form-label">Etiqueta</div>
-                <input class="form-input" type="text" placeholder="Escribe y pulsa Enter">
+                <input class="form-input" type="text" id="tag-input-edit" placeholder="Escribe y pulsa Enter">
               </div>
             </div>
-            <div class="tag-input-row">
+            <div class="tag-input-row" id="tag-chips-edit">
               <div class="tag-chip-current">
                 diseño
                 <span class="remove-tag">✕</span>
               </div>
             </div>
-            <div class="tag-suggestions">
-              <span class="tag-suggestion">ia</span>
-              <span class="tag-suggestion">dev</span>
-              <span class="tag-suggestion">video</span>
+            <div class="tag-suggestions" id="tag-suggestions-edit">
+              <span class="tag-suggestion" data-tag="ia">ia</span>
+              <span class="tag-suggestion" data-tag="dev">dev</span>
+              <span class="tag-suggestion" data-tag="video">video</span>
             </div>
           </div>
 
@@ -797,28 +826,28 @@
               <div class="form-row-icon">📁</div>
               <div class="form-row-body">
                 <div class="form-label">Carpeta</div>
-                <input class="form-input" type="text" value="Frontend" readonly style="cursor:pointer;">
+                <input class="form-input" type="text" id="folder-input-edit" value="Frontend" readonly style="cursor:pointer;">
               </div>
               <div class="form-row-arrow">›</div>
             </div>
-            <div class="folder-grid">
-              <div class="folder-option selected">
+            <div class="folder-grid" id="folder-grid-edit">
+              <div class="folder-option selected" data-folder="Frontend">
                 <div class="folder-option-icon" style="background:#FEF3C7;">📁</div>
                 <div class="folder-option-name">Frontend</div>
               </div>
-              <div class="folder-option">
+              <div class="folder-option" data-folder="Recursos IA">
                 <div class="folder-option-icon" style="background:#EBF3FB;">🧠</div>
                 <div class="folder-option-name">Recursos IA</div>
               </div>
-              <div class="folder-option">
+              <div class="folder-option" data-folder="Diseño UX">
                 <div class="folder-option-icon" style="background:#EDE9FE;">🎨</div>
                 <div class="folder-option-name">Diseño UX</div>
               </div>
-              <div class="folder-option">
+              <div class="folder-option" data-folder="Backend">
                 <div class="folder-option-icon" style="background:#DCFCE7;">⚙️</div>
                 <div class="folder-option-name">Backend</div>
               </div>
-              <button class="folder-add-new">+ Nueva carpeta</button>
+              <a href="add-folder.html" class="folder-add-new">+ Nueva carpeta</a>
             </div>
           </div>
 
@@ -831,15 +860,15 @@
               </div>
             </div>
             <div class="notes-area">
-              <textarea class="notes-textarea" placeholder="Añade una descripción o notas...">Guía completa sobre sistemas de diseño atómico: tokens, componentes, patrones y escalabilidad en productos digitales.</textarea>
+              <textarea class="notes-textarea" id="notes-edit" placeholder="Añade una descripción o notas...">Guía completa sobre sistemas de diseño atómico: tokens, componentes, patrones y escalabilidad en productos digitales.</textarea>
             </div>
           </div>
         </div>
 
         <!-- Bottom Bar -->
         <div class="bottom-bar">
-          <button class="btn-cancel">Cancelar</button>
-          <button class="btn-save">
+          <button class="btn-cancel" onclick="showToast('Cancelado', 'success')">Cancelar</button>
+          <button class="btn-save" id="save-btn-bottom-edit">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
             Guardar cambios
           </button>
@@ -851,6 +880,207 @@
       </div>
     </div>
   </div>
+
+<script>
+(function() {
+  // ============ TOAST ============
+  var toastEl = document.getElementById('toast');
+  var toastTimeout;
+  function showToast(msg, type) {
+    clearTimeout(toastTimeout);
+    toastEl.textContent = msg;
+    toastEl.className = 'toast ' + (type || 'success');
+    requestAnimationFrame(function() {
+      toastEl.classList.add('show');
+    });
+    toastTimeout = setTimeout(function() {
+      toastEl.classList.remove('show');
+    }, 2200);
+  }
+  window.showToast = showToast;
+
+  // ============ URL VALIDATION ============
+  function isValidURL(str) {
+    if (!str || !str.trim()) return null;
+    var s = str.trim();
+    // Accept URLs with or without protocol
+    if (!/^https?:\/\//i.test(s)) s = 'https://' + s;
+    try {
+      var u = new URL(s);
+      return u.protocol === 'http:' || u.protocol === 'https:';
+    } catch(e) {
+      return false;
+    }
+  }
+
+  function validateURL(inputId, validationId, hintId) {
+    var input = document.getElementById(inputId);
+    var validation = document.getElementById(validationId);
+    var hint = hintId ? document.getElementById(hintId) : null;
+    var val = input.value.trim();
+    var result = isValidURL(val);
+    var icon = validation.querySelector('.url-validation-icon');
+    var text = validation.querySelector('.url-validation-text');
+
+    validation.className = 'url-validation';
+    if (result === null) {
+      // empty — hide validation
+      if (hint) {
+        hint.textContent = 'Pega un enlace para comenzar';
+        hint.className = 'form-row-hint';
+        hint.style.color = '';
+      }
+    } else if (result) {
+      validation.classList.add('valid', 'visible');
+      icon.textContent = '✓';
+      text.textContent = 'Enlace válido';
+      if (hint) {
+        hint.textContent = '';
+        hint.style.display = 'none';
+      }
+    } else {
+      validation.classList.add('invalid', 'visible');
+      icon.textContent = '✕';
+      text.textContent = 'URL no válida';
+      if (hint) {
+        hint.textContent = '';
+        hint.style.display = 'none';
+      }
+    }
+    return result;
+  }
+
+  function updateSaveButtons(phoneId, urlValid) {
+    var bottomBtn = document.getElementById('save-btn-bottom-' + phoneId);
+    var disabled = !urlValid;
+    if (bottomBtn) bottomBtn.disabled = disabled;
+  }
+
+  // NEW form URL listener
+  var urlNew = document.getElementById('url-input-new');
+  urlNew.addEventListener('input', function() {
+    var valid = validateURL('url-input-new', 'url-validation-new', 'url-hint-new');
+    updateSaveButtons('new', valid);
+  });
+
+  // EDIT form URL listener
+  var urlEdit = document.getElementById('url-input-edit');
+  urlEdit.addEventListener('input', function() {
+    var valid = validateURL('url-input-edit', 'url-validation-edit', null);
+    updateSaveButtons('edit', valid);
+  });
+  // Initial validation for edit form
+  validateURL('url-input-edit', 'url-validation-edit', null);
+
+  // ============ EMOJI PICKER ============
+  function setupEmojiPicker(pickerId, previewId) {
+    var picker = document.getElementById(pickerId);
+    var preview = document.getElementById(previewId);
+    picker.addEventListener('click', function(e) {
+      var opt = e.target.closest('.emoji-option');
+      if (!opt) return;
+      picker.querySelectorAll('.emoji-option').forEach(function(o) { o.classList.remove('selected'); });
+      opt.classList.add('selected');
+      preview.textContent = opt.getAttribute('data-emoji');
+    });
+  }
+  setupEmojiPicker('emoji-picker-new', 'emoji-preview-new');
+  setupEmojiPicker('emoji-picker-edit', 'emoji-preview-edit');
+
+  // ============ COLOR PICKER ============
+  function setupColorPicker(pickerId, previewId) {
+    var picker = document.getElementById(pickerId);
+    var preview = document.getElementById(previewId);
+    picker.addEventListener('click', function(e) {
+      var opt = e.target.closest('.color-option');
+      if (!opt) return;
+      picker.querySelectorAll('.color-option').forEach(function(o) { o.classList.remove('selected'); });
+      opt.classList.add('selected');
+      preview.style.background = opt.getAttribute('data-color');
+    });
+  }
+  setupColorPicker('color-picker-new', 'emoji-preview-new');
+  setupColorPicker('color-picker-edit', 'emoji-preview-edit');
+
+  // ============ FOLDER SELECTOR ============
+  function setupFolderSelector(gridId, inputId) {
+    var grid = document.getElementById(gridId);
+    var input = document.getElementById(inputId);
+    grid.addEventListener('click', function(e) {
+      var opt = e.target.closest('.folder-option');
+      if (!opt) return;
+      grid.querySelectorAll('.folder-option').forEach(function(o) { o.classList.remove('selected'); });
+      opt.classList.add('selected');
+      input.value = opt.getAttribute('data-folder');
+    });
+  }
+  setupFolderSelector('folder-grid-new', 'folder-input-new');
+  setupFolderSelector('folder-grid-edit', 'folder-input-edit');
+
+  // ============ TAG INPUT ============
+  function setupTagInput(inputId, chipsId, suggestionsId) {
+    var input = document.getElementById(inputId);
+    var chips = document.getElementById(chipsId);
+    var suggestions = document.getElementById(suggestionsId);
+
+    function addTag(text) {
+      text = text.trim().toLowerCase();
+      if (!text) return;
+      // Check if already exists
+      var existing = chips.querySelectorAll('.tag-chip-current');
+      for (var i = 0; i < existing.length; i++) {
+        if (existing[i].textContent.replace('✕', '').trim() === text) return;
+      }
+      var chip = document.createElement('div');
+      chip.className = 'tag-chip-current';
+      chip.innerHTML = text + ' <span class="remove-tag">✕</span>';
+      chips.appendChild(chip);
+      input.value = '';
+      // Hide matching suggestion
+      var sugs = suggestions.querySelectorAll('.tag-suggestion');
+      sugs.forEach(function(s) {
+        if (s.getAttribute('data-tag') === text) s.style.display = 'none';
+      });
+    }
+
+    input.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        addTag(input.value);
+      }
+    });
+
+    chips.addEventListener('click', function(e) {
+      var removeBtn = e.target.closest('.remove-tag');
+      if (!removeBtn) return;
+      var chip = removeBtn.parentElement;
+      var tagText = chip.textContent.replace('✕', '').trim();
+      chip.remove();
+      // Restore suggestion
+      var sugs = suggestions.querySelectorAll('.tag-suggestion');
+      sugs.forEach(function(s) {
+        if (s.getAttribute('data-tag') === tagText) s.style.display = '';
+      });
+    });
+
+    suggestions.addEventListener('click', function(e) {
+      var sug = e.target.closest('.tag-suggestion');
+      if (!sug) return;
+      addTag(sug.getAttribute('data-tag'));
+    });
+  }
+  setupTagInput('tag-input-new', 'tag-chips-new', 'tag-suggestions-new');
+  setupTagInput('tag-input-edit', 'tag-chips-edit', 'tag-suggestions-edit');
+
+  // ============ SAVE BUTTONS ============
+  document.getElementById('save-btn-bottom-new').addEventListener('click', function() {
+    showToast('Enlace guardado correctamente', 'success');
+  });
+  document.getElementById('save-btn-bottom-edit').addEventListener('click', function() {
+    showToast('Cambios guardados', 'success');
+  });
+})();
+</script>
 
 </body>
 </html>
